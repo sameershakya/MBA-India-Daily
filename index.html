@@ -54,6 +54,21 @@ a{color:inherit;text-decoration:none;}
 /* ── PAGE WRAPPER ───────────────────────── */
 #page{position:relative;z-index:1;}
 
+/* ── LOGO MARK — CSS recreation of uploaded logo ── */
+.logo-mark{
+  width:38px;height:38px;
+  background:#050505;
+  border:1.5px solid #00CFC8;
+  box-shadow:0 0 8px rgba(0,207,200,.65),0 0 22px rgba(0,207,200,.25),inset 0 0 8px rgba(0,207,200,.1);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.logo-mark-letter{
+  font-family:var(--serif);
+  font-size:21px;font-weight:400;
+  color:#FFFFFF;line-height:1;margin-top:1px;
+}
+
 /* ── NAV ────────────────────────────────── */
 #nav{
   position:fixed;top:0;left:0;right:0;z-index:300;
@@ -140,11 +155,11 @@ a{color:inherit;text-decoration:none;}
 
 .hero-h1{
   font-family:var(--syne);font-weight:800;
-  font-size:clamp(56px,11vw,130px);
-  line-height:.9;letter-spacing:-4px;
+  font-size:clamp(44px,8vw,104px);
+  line-height:.92;letter-spacing:-3px;
   text-transform:uppercase;
   margin-bottom:40px;
-  overflow:hidden;
+  width:100%;
 }
 .hero-h1 .line{display:block;overflow:hidden;}
 .hero-h1 .line-inner{display:block;transform:translateY(110%);}
@@ -551,33 +566,32 @@ section{position:relative;z-index:2;}
   opacity:0;transform:translateY(20px);
 }
 
-/* social links strip */
-.cta-strip{
-  margin-top:80px;padding-top:64px;
+/* social square buttons — bottom of page only */
+.social-squares{
+  margin-top:60px;padding-top:48px;
   border-top:1px solid var(--border);
-  display:flex;justify-content:center;flex-wrap:wrap;
+  display:flex;justify-content:center;gap:12px;flex-wrap:wrap;
   opacity:0;transform:translateY(20px);
 }
-.strip-item{
-  display:flex;align-items:center;gap:16px;
-  padding:24px 48px;border:1px solid var(--border);
-  margin:-1px 0 0 -1px;
-  transition:.25s;cursor:pointer;
+.sq-btn{
+  width:60px;height:60px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;cursor:pointer;
+  transition:transform .25s,background .2s,border-color .2s;
+  position:relative;
 }
-.strip-item:hover{transform:translateY(-4px);z-index:2;}
-.si-li:hover{background:rgba(10,102,194,.1);border-color:rgba(10,102,194,.4);}
-.si-ig:hover{background:rgba(225,48,108,.08);border-color:rgba(225,48,108,.3);}
-.si-blog:hover{background:rgba(237,255,0,.06);border-color:rgba(237,255,0,.3);}
-.strip-icon{font-size:28px;}
-.strip-text{text-align:left;}
-.strip-handle{
-  font-family:var(--mono);font-size:11px;letter-spacing:1px;
-  text-transform:uppercase;margin-bottom:4px;
+.sq-btn:hover{transform:translateY(-5px);}
+.sq-btn .sq-tip{
+  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--border);background:var(--bg2);
+  white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;
 }
-.si-li .strip-handle{color:#70b5f9;}
-.si-ig .strip-handle{color:var(--pink);}
-.si-blog .strip-handle{color:var(--yellow);}
-.strip-sub{font-size:12px;color:var(--muted);}
+.sq-btn:hover .sq-tip{opacity:1;}
+.sq-li:hover{background:rgba(0,207,200,.08);border-color:rgba(0,207,200,.5);}
+.sq-ig:hover{background:rgba(255,45,120,.06);border-color:rgba(255,45,120,.4);}
+.sq-ed:hover{background:rgba(237,255,0,.06);border-color:rgba(237,255,0,.4);}
 
 /* ── FOOTER ─────────────────────────────── */
 footer{
@@ -623,7 +637,7 @@ footer{
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">
-    <div class="nav-M">M</div>
+    <div class="logo-mark"><span class="logo-mark-letter">M</span></div>
     <div class="nav-wordmark">
       MBA India Daily
       <span>Business Intelligence</span>
@@ -664,14 +678,6 @@ footer{
       <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
         Read Today
-      </a>
-      <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-c">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        LinkedIn
-      </a>
-      <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cv">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-        Instagram
       </a>
     </div>
   </div>
@@ -795,24 +801,20 @@ footer{
         </div>
       </div>
 
-      <!-- Panel 5 : Follow Us -->
+      <!-- Panel 5 : The Promise -->
       <div class="hpanel hp-5">
         <div class="hpanel-bg-num">05</div>
         <div class="hpanel-inner">
-          <div class="hpanel-index">05 / Join Us</div>
+          <div class="hpanel-index">05 / The Promise</div>
           <h2 class="hpanel-h2">
-            <span class="hpanel-outline">Start</span><br>
-            <em>Today.</em><br>
-            It's Free.
+            <span class="hpanel-outline">15 Minutes.</span><br>
+            <em>Every</em><br>
+            Morning.
           </h2>
           <p class="hpanel-body">
-            Follow MBA India Daily on <strong>LinkedIn and Instagram</strong> for daily visual intelligence. Read the full edition every morning. Share with a batchmate who wants to think sharper.
+            Each edition is structured to be read in under <strong>15 minutes</strong> — but leaves you with the kind of context it takes others hours of reading to build. Start every day sharper than you ended the last.
           </p>
-          <div style="display:flex;gap:12px;flex-wrap:wrap;">
-            <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y" style="font-size:10px;padding:12px 22px;">Read Today →</a>
-            <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-c" style="font-size:10px;padding:12px 22px;">LinkedIn</a>
-            <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cv" style="font-size:10px;padding:12px 22px;">Instagram</a>
-          </div>
+          <span class="hpanel-tag">Your Daily Edge</span>
         </div>
       </div>
 
@@ -911,8 +913,8 @@ footer{
       <div class="why-card">
         <span class="why-n">01</span>
         <span class="why-icon">⚡</span>
-        <div class="why-title">5-Minute Edge, Every Morning</div>
-        <p class="why-text">Each edition is structured to be read in under 5 minutes — but leaves you with the kind of context it takes others hours of reading to build. Start every day sharper than you ended the last.</p>
+        <div class="why-title">15-Minute Edge, Every Morning</div>
+        <p class="why-text">Each edition is structured to be read in under 15 minutes — but leaves you with the kind of context it takes others hours of reading to build. Start every day sharper than you ended the last.</p>
       </div>
       <div class="why-card">
         <span class="why-n">02</span>
@@ -952,42 +954,19 @@ footer{
       <p class="cta-sub" id="cta-sub">
         Follow MBA India Daily on LinkedIn and Instagram. Read today's edition. Share with a batchmate who wants to think sharper.
       </p>
-      <div class="cta-btns" id="cta-btns">
-        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y" style="font-size:12px;padding:18px 40px;">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
-          Read Today's Edition
+      <!-- Small square social buttons — only second appearance on the entire page -->
+      <div class="social-squares" id="social-squares">
+        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="sq-btn sq-li">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <span class="sq-tip">LinkedIn</span>
         </a>
-        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-c" style="font-size:12px;padding:18px 40px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          Follow on LinkedIn
+        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="sq-btn sq-ig">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <span class="sq-tip">Instagram</span>
         </a>
-        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cv" style="font-size:12px;padding:18px 40px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          Follow on Instagram
-        </a>
-      </div>
-
-      <div class="cta-strip" id="cta-strip">
-        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="strip-item si-li">
-          <span class="strip-icon">💼</span>
-          <div class="strip-text">
-            <div class="strip-handle">LinkedIn</div>
-            <div class="strip-sub">MBA India Daily · Follow for daily posts</div>
-          </div>
-        </a>
-        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="strip-item si-ig">
-          <span class="strip-icon">📸</span>
-          <div class="strip-text">
-            <div class="strip-handle">@mbaindiadaily</div>
-            <div class="strip-sub">Instagram · Visual intelligence daily</div>
-          </div>
-        </a>
-        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="strip-item si-blog">
-          <span class="strip-icon">📰</span>
-          <div class="strip-text">
-            <div class="strip-handle">Daily Edition</div>
-            <div class="strip-sub">Read today's full newsletter →</div>
-          </div>
+        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="sq-btn sq-ed">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span class="sq-tip">Daily Edition</span>
         </a>
       </div>
 
@@ -1000,7 +979,7 @@ footer{
 <!-- FOOTER -->
 <footer>
   <div class="foot-brand">
-    <div class="foot-M">M</div>
+    <div class="logo-mark"><span class="logo-mark-letter">M</span></div>
     <div>
       <div class="foot-name">MBA India Daily</div>
       <div class="foot-sub">Business Intelligence</div>
@@ -1208,7 +1187,7 @@ gsap.to('.aud-row',{
 })();
 
 /* ── CTA reveal ─────────────────────────── */
-gsap.to(['#cta-over','#cta-h2','#cta-it','#cta-sub','#cta-btns','#cta-strip'],{
+gsap.to(['#cta-over','#cta-h2','#cta-it','#cta-sub','#social-squares'],{
   scrollTrigger:{trigger:'#cta',start:'top 75%'},
   opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'
 });

@@ -4,1413 +4,1266 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBA India Daily — Understand the Economy. Not Just the Headlines.</title>
-<meta name="description" content="MBA India Daily is India's sharpest business intelligence newsletter for MBA aspirants, MBA & PGDM students, and young managers.">
+<meta name="description" content="India's sharpest daily business intelligence newsletter for MBA aspirants, students and future managers.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
 <style>
-/* ─── TOKENS ─────────────────────────────────────── */
-:root {
-  --black:    #02040A;
-  --ink:      #F0F4FF;
-  --ink-dim:  #A8BCDE;
+/* ── TOKENS ─────────────────────────────── */
+:root{
+  --bg:      #080808;
+  --bg2:     #0F0F0F;
+  --bg3:     #141414;
+  --ink:     #EFEFEF;
+  --muted:   #5A5A5A;
+  --border:  #1E1E1E;
 
-  --saffron:  #FF9B21;
-  --saffron2: #FF6B00;
-  --teal:     #2DFDC5;
-  --teal2:    #00C9A7;
-  --violet:   #C084FC;
-  --violet2:  #7C3AED;
-  --gold:     #FBBF24;
-  --pink:     #F472B6;
-  --red:      #FF4545;
-  --green:    #4ADE80;
-  --indigo:   #818CF8;
-  --blue:     #38BDF8;
+  --yellow:  #EDFF00;
+  --coral:   #FF3B3F;
+  --cyan:    #00F0FF;
+  --purple:  #9B5DE5;
+  --green:   #39FF14;
+  --orange:  #FF7A00;
+  --pink:    #FF2D78;
 
-  --syne: 'Syne', sans-serif;
-  --play: 'Playfair Display', serif;
-  --grotesk: 'Space Grotesk', sans-serif;
-  --mono: 'Space Mono', monospace;
+  --syne:  'Syne', sans-serif;
+  --serif: 'DM Serif Display', serif;
+  --mono:  'Space Mono', monospace;
 }
 
-/* ─── RESET ────────────────────────────────────────── */
-*,*::before,*::after { margin:0;padding:0;box-sizing:border-box; }
-html { scroll-behavior:smooth; overflow-x:hidden; }
-body {
-  background: var(--black);
-  color: var(--ink);
-  font-family: var(--grotesk);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+/* ── RESET ──────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{overflow-x:hidden;scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--syne);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-a { color:inherit; text-decoration:none; }
+a{color:inherit;text-decoration:none;}
 
-/* ─── CANVAS ─────────────────────────────────────── */
-#canvas-bg {
-  position:fixed; inset:0; z-index:0; pointer-events:none;
-}
-
-/* ─── GLOBAL DECO SHAPES ───────────────────────────── */
-.deco-ring {
-  position:absolute; border-radius:50%; pointer-events:none;
-  border-style: solid;
-}
-.deco-plus {
-  position:absolute; pointer-events:none; font-size:28px; font-weight:900;
+/* ── SPIRAL CANVAS (fixed bg) ───────────── */
+#spiral-canvas{
+  position:fixed;inset:0;z-index:0;
+  pointer-events:none;opacity:.7;
 }
 
-/* ─── NAV ──────────────────────────────────────────── */
-nav {
-  position:fixed; top:0; left:0; right:0; z-index:200;
-  padding:0 40px;
-  height:72px;
-  display:flex; align-items:center; justify-content:space-between;
-  background: rgba(2,4,10,.7);
-  backdrop-filter: blur(24px);
-  border-bottom: 2px solid var(--saffron);
-  transition: border-color .3s;
+/* ── PAGE WRAPPER ───────────────────────── */
+#page{position:relative;z-index:1;}
+
+/* ── NAV ────────────────────────────────── */
+#nav{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:64px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  mix-blend-mode:normal;
+  transition:background .4s;
 }
-.nav-logo-wrap {
-  display:flex; align-items:center; gap:14px;
+#nav.dark{
+  background:rgba(8,8,8,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
 }
-.nav-mark {
-  width:42px; height:42px; border-radius:0;
-  background: linear-gradient(135deg, var(--saffron), var(--violet));
-  display:flex; align-items:center; justify-content:center;
-  font-family: var(--syne);
-  font-weight:800; font-size:20px; color:var(--black);
-  clip-path: polygon(0 0,100% 0,100% 75%,75% 100%,0 100%);
+.nav-logo{
+  display:flex;align-items:center;gap:12px;
 }
-.nav-wordmark {
-  font-family: var(--syne);
-  font-weight:800; font-size:15px; letter-spacing:1px;
-  text-transform:uppercase;
-  line-height:1.1;
+.nav-M{
+  width:36px;height:36px;
+  background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:18px;color:var(--bg);
+  clip-path:polygon(0 0,100% 0,85% 100%,0 100%);
 }
-.nav-wordmark span {
-  display:block; font-size:9px; letter-spacing:3px;
-  color:var(--saffron); font-family:var(--mono); font-weight:400;
+.nav-wordmark{
+  font-weight:800;font-size:14px;letter-spacing:.5px;
+  text-transform:uppercase;line-height:1;
 }
-.nav-right {
-  display:flex; align-items:center; gap:10px;
+.nav-wordmark span{
+  display:block;font-family:var(--mono);font-size:8px;
+  letter-spacing:2.5px;color:var(--yellow);margin-top:3px;
 }
-.nbtn {
-  font-family: var(--mono);
-  font-size:11px; font-weight:700; letter-spacing:.5px;
-  padding:9px 20px; border-radius:0;
-  border:2px solid transparent;
-  cursor:pointer; transition:.2s; white-space:nowrap;
-  text-transform:uppercase;
+.nav-links{display:flex;gap:8px;align-items:center;}
+.nl{
+  font-family:var(--mono);font-size:10px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;
+  padding:9px 18px;border:1px solid var(--border);
+  color:var(--muted);background:transparent;cursor:pointer;
+  transition:.2s;
 }
-.nbtn-ghost {
-  border-color: rgba(255,255,255,.15); color:var(--ink-dim);
-  background:transparent;
+.nl:hover{border-color:var(--yellow);color:var(--yellow);}
+.nl-cta{
+  background:var(--yellow);color:var(--bg);
+  border-color:var(--yellow);
 }
-.nbtn-ghost:hover { border-color:var(--teal); color:var(--teal); }
-.nbtn-hot {
-  background: linear-gradient(90deg,var(--saffron),var(--saffron2));
-  color:var(--black); border-color:transparent; font-weight:700;
-}
-.nbtn-hot:hover { transform:translateY(-2px); box-shadow:0 6px 24px rgba(255,155,33,.5); }
+.nl-cta:hover{background:#fff200;transform:translateY(-2px);box-shadow:0 6px 24px rgba(237,255,0,.4);}
 @media(max-width:640px){
-  nav{padding:0 16px;}
-  .nav-right .nbtn:not(.nbtn-hot){display:none;}
+  #nav{padding:0 20px;}
+  .nav-links .nl:not(.nl-cta){display:none;}
 }
 
-/* ─── SECTION WRAPPER ──────────────────────────────── */
-.outer { position:relative; z-index:2; }
-
-/* ─── HERO ─────────────────────────────────────────── */
-#hero {
+/* ── HERO ───────────────────────────────── */
+#hero{
   min-height:100vh;
-  display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  text-align:center;
-  padding:120px 32px 80px;
-  overflow:hidden;
-  position:relative;
+  display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:flex-end;
+  padding:0 64px 80px;
+  position:relative;overflow:hidden;
 }
+@media(max-width:640px){#hero{padding:0 24px 60px;}}
 
-/* Maximalist background layers */
-#hero::before {
-  content:'';
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(255,155,33,.28), transparent),
-    radial-gradient(ellipse 60% 40% at 90% 60%, rgba(45,253,197,.15), transparent),
-    radial-gradient(ellipse 50% 60% at 0% 80%, rgba(192,132,252,.15), transparent),
-    radial-gradient(ellipse 40% 30% at 50% 100%, rgba(244,114,182,.1), transparent);
-  pointer-events:none;
-}
-#hero::after {
-  content:'';
-  position:absolute; inset:0;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,155,33,.04) 80px),
-    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,155,33,.04) 80px);
-  pointer-events:none;
-}
+/* corner brackets */
+.brkt{position:absolute;pointer-events:none;}
+.brkt-tl{top:80px;left:48px;width:50px;height:50px;
+  border-top:2px solid var(--yellow);border-left:2px solid var(--yellow);}
+.brkt-tr{top:80px;right:48px;width:50px;height:50px;
+  border-top:2px solid var(--coral);border-right:2px solid var(--coral);}
+.brkt-br{bottom:30px;right:48px;width:40px;height:40px;
+  border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);}
 
-.hero-corner-tl {
-  position:absolute; top:90px; left:32px;
-  width:120px; height:120px;
-  border-top:3px solid var(--saffron);
-  border-left:3px solid var(--saffron);
-  opacity:.5;
+.hero-index{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--yellow);
+  margin-bottom:32px;
+  display:flex;align-items:center;gap:12px;
+  opacity:0;transform:translateX(-20px);
 }
-.hero-corner-br {
-  position:absolute; bottom:40px; right:32px;
-  width:80px; height:80px;
-  border-bottom:3px solid var(--teal);
-  border-right:3px solid var(--teal);
-  opacity:.5;
+.hero-index-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--coral);
+  animation:pulse 2s infinite;
 }
-.hero-ring-1 {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:600px; height:600px; border-radius:50%;
-  border:1px solid rgba(255,155,33,.07);
-  pointer-events:none;
-}
-.hero-ring-2 {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:900px; height:900px; border-radius:50%;
-  border:1px solid rgba(45,253,197,.05);
-  pointer-events:none;
-}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,59,63,.6)}50%{box-shadow:0 0 0 8px rgba(255,59,63,0)}}
 
-.hero-kicker {
-  display:inline-flex; align-items:center; gap:10px;
-  font-family:var(--mono); font-size:11px; letter-spacing:2.5px;
-  text-transform:uppercase; color:var(--saffron);
-  background: rgba(255,155,33,.1);
-  border:2px solid var(--saffron);
-  padding:8px 20px;
-  margin-bottom:40px;
-  opacity:0;
-  position:relative; z-index:1;
-}
-.kicker-dot {
-  width:7px;height:7px;border-radius:50%;
-  background:var(--teal); box-shadow:0 0 0 3px rgba(45,253,197,.25);
-  animation:blink 2s infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-
-.hero-h1 {
-  font-family: var(--syne);
-  font-weight:800;
-  font-size: clamp(52px,10vw,118px);
-  line-height:.94;
-  letter-spacing:-3px;
+.hero-h1{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(56px,11vw,130px);
+  line-height:.9;letter-spacing:-4px;
   text-transform:uppercase;
-  max-width:1100px;
-  margin:0 auto 16px;
-  opacity:0;
-  position:relative; z-index:1;
-}
-.hero-h1 .line-saffron { color:var(--saffron); display:block; }
-.hero-h1 .line-outline {
-  -webkit-text-stroke: 2px rgba(255,255,255,.35);
-  color:transparent; display:block;
-}
-.hero-h1 .line-teal { color:var(--teal); display:block; }
-
-.hero-tagline {
-  font-family:var(--play);
-  font-style:italic;
-  font-size:clamp(18px,2.5vw,26px);
-  color:var(--ink-dim); letter-spacing:.5px;
-  margin:0 auto 20px; max-width:640px;
-  opacity:0; position:relative; z-index:1;
-}
-.hero-tagline em { color:var(--gold); font-style:normal; }
-
-.hero-sub {
-  font-size:clamp(15px,1.5vw,18px);
-  color:var(--ink-dim); max-width:560px;
-  margin:0 auto 56px; line-height:1.75;
-  opacity:0; position:relative; z-index:1;
-}
-
-.hero-ctas {
-  display:flex; flex-wrap:wrap; gap:14px;
-  justify-content:center; opacity:0; position:relative; z-index:1;
-}
-
-/* ─── BUTTONS ─────────────────────────────────────── */
-.btn {
-  display:inline-flex; align-items:center; gap:10px;
-  font-family:var(--mono); font-size:12px; font-weight:700;
-  letter-spacing:.8px; text-transform:uppercase;
-  padding:16px 32px;
-  border:2px solid transparent;
-  cursor:pointer;
-  transition:transform .25s, box-shadow .25s;
-  white-space:nowrap; border-radius:0;
-}
-.btn:hover { transform:translateY(-4px); }
-
-.btn-primary {
-  background:linear-gradient(90deg,var(--saffron),var(--saffron2));
-  color:var(--black); border-color:transparent;
-}
-.btn-primary:hover { box-shadow:0 12px 40px rgba(255,107,0,.5); }
-
-.btn-li {
-  background:transparent; color:var(--blue);
-  border-color:var(--blue);
-}
-.btn-li:hover { background:rgba(56,189,248,.12); box-shadow:0 8px 28px rgba(56,189,248,.25); }
-
-.btn-ig {
-  background:transparent; color:var(--pink);
-  border-color:var(--pink);
-}
-.btn-ig:hover { background:rgba(244,114,182,.1); box-shadow:0 8px 28px rgba(244,114,182,.25); }
-
-/* ─── SCROLL HINT ──────────────────────────────────── */
-.hero-scroll {
-  position:absolute; bottom:32px; left:50%; transform:translateX(-50%);
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  animation:fadeHint 1s 2s both;
-}
-@keyframes fadeHint{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:.6;transform:translateX(-50%) translateY(0)}}
-.scroll-line {
-  width:2px; height:48px;
-  background:linear-gradient(to bottom,var(--saffron),transparent);
-  animation:scrollLine 1.8s infinite;
-}
-@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-.scroll-txt {
-  font-family:var(--mono); font-size:9px; letter-spacing:3px;
-  text-transform:uppercase; color:var(--saffron); opacity:.7;
-}
-
-/* ─── MARQUEE ──────────────────────────────────────── */
-.marquee-band {
+  margin-bottom:40px;
   overflow:hidden;
-  border-top:3px solid var(--saffron);
-  border-bottom:3px solid var(--saffron);
-  background: linear-gradient(90deg,rgba(255,155,33,.08),rgba(255,107,0,.04),rgba(255,155,33,.08));
-  padding:16px 0;
-  position:relative; z-index:3;
 }
-.marquee-track {
-  display:flex; gap:0; width:max-content;
-  animation:marquee 24s linear infinite;
-}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.mitem {
-  font-family:var(--syne); font-weight:700;
-  font-size:14px; letter-spacing:2px; text-transform:uppercase;
-  padding:0 32px; white-space:nowrap; color:var(--saffron);
-}
-.mitem.sep { color:var(--teal); opacity:.5; padding:0 8px; }
+.hero-h1 .line{display:block;overflow:hidden;}
+.hero-h1 .line-inner{display:block;transform:translateY(110%);}
 
-/* ─── WHAT IS ──────────────────────────────────────── */
-#what {
-  padding:120px 0; overflow:hidden;
-  background: var(--black);
+.h1-yellow{color:var(--yellow);}
+.h1-outline{-webkit-text-stroke:2px rgba(255,255,255,.2);color:transparent;}
+.h1-coral{color:var(--coral);}
+
+.hero-bottom{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  width:100%;flex-wrap:wrap;gap:32px;
+}
+.hero-desc{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(16px,2vw,22px);
+  color:rgba(255,255,255,.5);
+  max-width:480px;line-height:1.7;
+  opacity:0;transform:translateY(20px);
+}
+.hero-desc em{color:var(--yellow);font-style:normal;}
+.hero-ctas{
+  display:flex;gap:12px;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);
+}
+
+/* ── BUTTONS ────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.8px;text-transform:uppercase;
+  padding:14px 28px;border:1.5px solid transparent;
+  cursor:pointer;transition:transform .25s,box-shadow .25s;
+}
+.btn:hover{transform:translateY(-3px);}
+.btn-y{background:var(--yellow);color:var(--bg);border-color:var(--yellow);}
+.btn-y:hover{box-shadow:0 10px 36px rgba(237,255,0,.4);}
+.btn-c{background:transparent;color:var(--coral);border-color:var(--coral);}
+.btn-c:hover{background:rgba(255,59,63,.08);box-shadow:0 8px 28px rgba(255,59,63,.3);}
+.btn-cv{background:transparent;color:var(--cyan);border-color:var(--cyan);}
+.btn-cv:hover{background:rgba(0,240,255,.06);box-shadow:0 8px 28px rgba(0,240,255,.25);}
+
+/* ── MARQUEE ────────────────────────────── */
+.marquee{
+  overflow:hidden;border-top:2px solid var(--yellow);
+  border-bottom:2px solid var(--yellow);
+  background:rgba(237,255,0,.04);
+  padding:14px 0;position:relative;z-index:2;
+}
+.marquee-row{display:flex;width:max-content;animation:mq 20s linear infinite;}
+.marquee-row.rev{animation-direction:reverse;animation-duration:25s;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mq-item{
+  font-family:var(--mono);font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:0 28px;white-space:nowrap;color:var(--yellow);
+}
+.mq-sep{color:var(--coral);padding:0 4px;}
+
+/* ── SECTION BASE ───────────────────────── */
+section{position:relative;z-index:2;}
+.wrap{max-width:1280px;margin:0 auto;padding:0 64px;}
+@media(max-width:640px){.wrap{padding:0 24px;}}
+
+/* section label */
+.s-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;display:inline-flex;align-items:center;gap:10px;
+  margin-bottom:24px;
+}
+.s-label::after{content:'';flex:0 0 32px;height:1.5px;background:currentColor;}
+
+/* ── HORIZONTAL SCROLL SECTION ──────────── */
+#hscroll-wrap{
+  /* height set by JS based on panel count */
   position:relative;
 }
-#what::before {
+#hscroll-pin{
+  overflow:hidden;
+  position:sticky;top:0;height:100vh;
+}
+.hscroll-track{
+  display:flex;height:100vh;
+  will-change:transform;
+}
+.hpanel{
+  min-width:100vw;height:100vh;
+  display:flex;align-items:center;
+  padding:64px;
+  flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+@media(max-width:640px){.hpanel{padding:24px;}}
+
+/* panel accent line */
+.hpanel::before{
   content:'';
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 70% 60% at 100% 50%, rgba(45,253,197,.06), transparent),
-    radial-gradient(ellipse 50% 40% at 0% 50%, rgba(255,155,33,.05), transparent);
-  pointer-events:none;
+  position:absolute;top:0;left:0;right:0;height:3px;
 }
+.hp-1::before{background:linear-gradient(90deg,var(--yellow),var(--orange));}
+.hp-2::before{background:linear-gradient(90deg,var(--coral),var(--pink));}
+.hp-3::before{background:linear-gradient(90deg,var(--cyan),var(--purple));}
+.hp-4::before{background:linear-gradient(90deg,var(--purple),var(--pink));}
+.hp-5::before{background:linear-gradient(90deg,var(--green),var(--cyan));}
 
-.what-stripe {
-  position:absolute; left:0; top:0; bottom:0; width:6px;
-  background:linear-gradient(to bottom,var(--saffron),var(--teal),var(--violet));
+.hpanel-bg-num{
+  position:absolute;right:-10px;bottom:-20px;
+  font-family:var(--syne);font-weight:800;font-size:280px;
+  line-height:1;color:transparent;pointer-events:none;
+  -webkit-text-stroke:1px rgba(255,255,255,.03);
 }
+.hpanel-inner{max-width:720px;position:relative;z-index:1;}
+.hpanel-index{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;margin-bottom:28px;
+}
+.hp-1 .hpanel-index{color:var(--yellow);}
+.hp-2 .hpanel-index{color:var(--coral);}
+.hp-3 .hpanel-index{color:var(--cyan);}
+.hp-4 .hpanel-index{color:var(--purple);}
+.hp-5 .hpanel-index{color:var(--green);}
 
-.wrap { max-width:1200px; margin:0 auto; padding:0 48px; }
-@media(max-width:640px){ .wrap{padding:0 20px;} }
+.hpanel-h2{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(42px,7vw,88px);
+  line-height:.92;letter-spacing:-3px;
+  text-transform:uppercase;
+  margin-bottom:32px;
+}
+.hp-1 .hpanel-h2 em{color:var(--yellow);font-style:normal;}
+.hp-2 .hpanel-h2 em{color:var(--coral);font-style:normal;}
+.hp-3 .hpanel-h2 em{color:var(--cyan);font-style:normal;}
+.hp-4 .hpanel-h2 em{color:var(--purple);font-style:normal;}
+.hp-5 .hpanel-h2 em{color:var(--green);font-style:normal;}
 
-.what-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
-}
-@media(max-width:900px){ .what-grid{grid-template-columns:1fr;gap:48px;} }
-
-.sec-eyebrow {
-  font-family:var(--mono); font-size:10px; letter-spacing:3px;
-  text-transform:uppercase; margin-bottom:16px;
-  display:inline-flex; align-items:center; gap:8px;
-}
-.sec-eyebrow::before {
-  content:''; width:28px; height:2px;
-  background:linear-gradient(90deg,var(--saffron),var(--teal));
-}
-
-.what-h2 {
-  font-family:var(--syne); font-weight:800;
-  font-size:clamp(36px,5vw,64px);
-  line-height:.95; letter-spacing:-2px;
-  text-transform:uppercase; margin-bottom:32px;
-}
-.what-h2 .w-saffron{color:var(--saffron);}
-.what-h2 .w-outline{-webkit-text-stroke:2px var(--ink);color:transparent;}
-
-.what-body {
-  font-size:17px; color:var(--ink-dim);
-  line-height:1.8; margin-bottom:32px;
-}
-.what-body strong { color:var(--ink); }
-.what-body .hl-teal { color:var(--teal); font-weight:600; }
-.what-body .hl-saffron { color:var(--saffron); font-weight:600; }
-
-/* Stat block */
-.stat-block {
-  display:grid; grid-template-columns:1fr 1fr; gap:0;
-  border:3px solid var(--rule,#1a2540);
-}
-.stat-item {
-  padding:28px 24px;
-  border:1px solid rgba(255,255,255,.05);
-  position:relative; overflow:hidden;
-  transition:.3s;
-}
-.stat-item::before {
-  content:'';
-  position:absolute; inset:0; opacity:0; transition:opacity .3s;
-}
-.stat-item:nth-child(1)::before { background:linear-gradient(135deg,rgba(255,155,33,.1),transparent); }
-.stat-item:nth-child(2)::before { background:linear-gradient(135deg,rgba(45,253,197,.08),transparent); }
-.stat-item:nth-child(3)::before { background:linear-gradient(135deg,rgba(192,132,252,.1),transparent); }
-.stat-item:nth-child(4)::before { background:linear-gradient(135deg,rgba(251,191,36,.08),transparent); }
-.stat-item:hover::before { opacity:1; }
-
-.stat-num {
-  font-family:var(--syne); font-weight:800;
-  font-size:clamp(36px,5vw,54px); line-height:1;
-  margin-bottom:10px;
-}
-.sn-saffron{color:var(--saffron);}
-.sn-teal{color:var(--teal);}
-.sn-violet{color:var(--violet);}
-.sn-gold{color:var(--gold);}
-.stat-lbl{font-size:13px;color:var(--ink-dim);line-height:1.5;}
-
-/* corner marks on stat block */
-.stat-corner {
-  position:absolute;
-  width:16px;height:16px;
-  pointer-events:none;
-}
-.stat-corner.tl{top:0;left:0;border-top:3px solid var(--saffron);border-left:3px solid var(--saffron);}
-.stat-corner.br{bottom:0;right:0;border-bottom:3px solid var(--teal);border-right:3px solid var(--teal);}
-
-/* ─── HORIZ TEXT ───────────────────────────────────── */
-.horiz-banner {
-  overflow:hidden; padding:28px 0;
-  background: linear-gradient(90deg,var(--violet2),#1d0a3c,var(--violet2));
-  border-top:2px solid var(--violet);
-  border-bottom:2px solid var(--violet);
-  position:relative; z-index:3;
-}
-.horiz-inner {
-  display:flex; gap:0; width:max-content;
-}
-.horiz-item {
-  font-family:var(--play); font-weight:900; font-style:italic;
-  font-size:clamp(40px,5vw,68px); line-height:1;
-  padding:0 40px; white-space:nowrap;
+.hpanel-outline{
   -webkit-text-stroke:2px rgba(255,255,255,.2);
   color:transparent;
-  transition:.3s;
 }
-.horiz-item.lit {
-  -webkit-text-stroke:0;
-  color:rgba(255,255,255,.15);
+.hpanel-body{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(17px,2vw,22px);
+  color:rgba(255,255,255,.5);line-height:1.75;
+  max-width:580px;margin-bottom:36px;
 }
-.horiz-item.saffron-txt {
-  color:var(--saffron);
-  -webkit-text-stroke:0;
+.hpanel-body strong{color:var(--ink);font-style:normal;}
+.hpanel-tag{
+  display:inline-block;
+  font-family:var(--mono);font-size:10px;letter-spacing:2px;
+  text-transform:uppercase;padding:8px 20px;
+  border:1.5px solid;font-weight:700;
+}
+.hp-1 .hpanel-tag{border-color:var(--yellow);color:var(--yellow);}
+.hp-2 .hpanel-tag{border-color:var(--coral);color:var(--coral);}
+.hp-3 .hpanel-tag{border-color:var(--cyan);color:var(--cyan);}
+.hp-4 .hpanel-tag{border-color:var(--purple);color:var(--purple);}
+.hp-5 .hpanel-tag{border-color:var(--green);color:var(--green);}
+
+/* progress bar */
+.hscroll-progress{
+  position:absolute;bottom:40px;left:64px;
+  display:flex;gap:10px;align-items:center;z-index:10;
+}
+.hp-dot{
+  width:32px;height:2px;
+  background:rgba(255,255,255,.15);
+  transition:.3s;cursor:pointer;
+}
+.hp-dot.active{background:var(--yellow);width:48px;}
+
+/* ── TEXT REVEAL SHARED ─────────────────── */
+.reveal-block{overflow:hidden;}
+.reveal-inner{transform:translateY(100%);display:block;}
+
+.word-reveal .word{
+  display:inline-block;overflow:hidden;vertical-align:bottom;
+}
+.word-reveal .word-inner{
+  display:inline-block;transform:translateY(105%);
 }
 
-/* ─── PILLARS ──────────────────────────────────────── */
-#pillars {
-  padding:120px 0;
-  background:linear-gradient(180deg,var(--black) 0%,#07101E 50%,var(--black) 100%);
-  border-top:2px solid rgba(255,255,255,.04);
-  position:relative; overflow:hidden;
-}
-#pillars::after {
-  content:'';
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,155,33,.07), transparent),
-    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(45,253,197,.05), transparent);
-  pointer-events:none;
-}
+/* ── PILLARS SECTION ────────────────────── */
+#pillars{padding:140px 0;background:var(--bg);}
 
-/* large deco number */
-.deco-num {
-  position:absolute; right:-20px; top:40px;
-  font-family:var(--syne); font-weight:800;
-  font-size:280px; line-height:1;
-  color:transparent;
-  -webkit-text-stroke:1px rgba(255,155,33,.07);
-  pointer-events:none; user-select:none;
-  z-index:0;
+.sec-intro{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:64px;align-items:end;margin-bottom:80px;
 }
+@media(max-width:860px){.sec-intro{grid-template-columns:1fr;gap:32px;}}
 
-.sec-head {
-  display:flex; align-items:flex-end; justify-content:space-between;
-  margin-bottom:64px; flex-wrap:wrap; gap:24px; position:relative; z-index:1;
-}
-.sec-h2 {
-  font-family:var(--syne); font-weight:800;
-  font-size:clamp(32px,5vw,60px);
-  line-height:.95; letter-spacing:-2px;
+.sec-big-h2{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(42px,6vw,80px);
+  line-height:.9;letter-spacing:-3px;
   text-transform:uppercase;
 }
-.sec-h2 .outline { -webkit-text-stroke:2px rgba(255,255,255,.3); color:transparent; }
-.sec-h2 .colored { color:var(--teal); }
-.sec-sub {
-  font-size:15px; color:var(--ink-dim);
-  max-width:380px; line-height:1.7;
+.sec-big-h2 .outline{-webkit-text-stroke:2px rgba(255,255,255,.18);color:transparent;}
+.sec-big-h2 .yellow{color:var(--yellow);}
+.sec-big-h2 .coral{color:var(--coral);}
+.sec-big-h2 .cyan{color:var(--cyan);}
+
+.sec-right-desc{
+  font-family:var(--serif);font-style:italic;
+  font-size:18px;color:rgba(255,255,255,.4);
+  line-height:1.8;
+}
+.sec-right-desc em{color:var(--yellow);font-style:normal;}
+
+.pillars-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--border);
+}
+@media(max-width:900px){.pillars-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:560px){.pillars-grid{grid-template-columns:1fr;}}
+
+.pc{
+  padding:36px 32px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:background .3s;
+  opacity:0;transform:translateY(30px);
+}
+.pc:hover{background:rgba(255,255,255,.02);}
+
+/* colored left border on hover */
+.pc::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;transform:scaleY(0);transform-origin:bottom;
+  transition:transform .4s cubic-bezier(.22,.68,0,1.2);
+}
+.pc:hover::before{transform:scaleY(1);}
+.pc:nth-child(1)::before,.pc:nth-child(7)::before{background:var(--yellow);}
+.pc:nth-child(2)::before,.pc:nth-child(8)::before{background:var(--coral);}
+.pc:nth-child(3)::before,.pc:nth-child(9)::before{background:var(--cyan);}
+.pc:nth-child(4)::before{background:var(--purple);}
+.pc:nth-child(5)::before{background:var(--green);}
+.pc:nth-child(6)::before{background:var(--orange);}
+
+.pc-num{
+  font-family:var(--mono);font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:20px;
+}
+.pc-icon{font-size:32px;display:block;margin-bottom:16px;line-height:1;}
+.pc-name{
+  font-family:var(--syne);font-weight:700;font-size:17px;
+  letter-spacing:-.3px;margin-bottom:10px;line-height:1.2;
+}
+.pc-desc{font-size:13.5px;color:var(--muted);line-height:1.65;}
+
+/* ── AUDIENCE ───────────────────────────── */
+#for-whom{
+  padding:140px 0;
+  background:linear-gradient(180deg,var(--bg),#0C0C18,var(--bg));
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
 }
 
-.pillars-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:2px;
-  position:relative; z-index:1;
+.aud-wrap{display:flex;flex-direction:column;gap:0;}
+.aud-row{
+  display:grid;grid-template-columns:120px 1fr 1fr;
+  align-items:center;gap:0;
+  border-bottom:1px solid var(--border);
+  padding:48px 0;
+  opacity:0;transform:translateX(-40px);
 }
-@media(max-width:900px){ .pillars-grid{grid-template-columns:repeat(2,1fr);} }
-@media(max-width:560px){ .pillars-grid{grid-template-columns:1fr;} }
+@media(max-width:700px){
+  .aud-row{grid-template-columns:1fr;gap:20px;padding:32px 0;}
+}
+.aud-idx{
+  font-family:var(--mono);font-size:48px;font-weight:700;
+  line-height:1;letter-spacing:-2px;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.1);
+}
+.aud-left{padding-right:40px;border-right:1px solid var(--border);}
+.aud-emoji{font-size:48px;display:block;margin-bottom:20px;line-height:1;}
+.aud-title{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(24px,3vw,36px);letter-spacing:-1px;
+  text-transform:uppercase;line-height:1;margin-bottom:8px;
+}
+.aud-row:nth-child(1) .aud-title{color:var(--yellow);}
+.aud-row:nth-child(2) .aud-title{color:var(--coral);}
+.aud-row:nth-child(3) .aud-title{color:var(--cyan);}
+.aud-tag{
+  display:inline-block;margin-top:16px;
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;padding:5px 14px;
+  border:1px solid;font-weight:700;
+}
+.aud-row:nth-child(1) .aud-tag{border-color:var(--yellow);color:var(--yellow);}
+.aud-row:nth-child(2) .aud-tag{border-color:var(--coral);color:var(--coral);}
+.aud-row:nth-child(3) .aud-tag{border-color:var(--cyan);color:var(--cyan);}
+.aud-right{padding-left:40px;}
+.aud-desc{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(15px,1.6vw,19px);
+  color:rgba(255,255,255,.45);line-height:1.8;
+}
+.aud-desc strong{color:var(--ink);font-style:normal;}
 
-.pillar-card {
-  background:rgba(10,17,32,.9);
-  border:1px solid rgba(255,255,255,.05);
-  padding:32px 28px;
-  cursor:default;
-  position:relative; overflow:hidden;
-  transition:transform .35s cubic-bezier(.22,.68,0,1.2);
-  transform-style:preserve-3d;
-  will-change:transform;
+/* ── WHY ────────────────────────────────── */
+#why{padding:140px 0;}
+
+.why-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:2px;margin-top:80px;
+  background:var(--border);
+}
+@media(max-width:700px){.why-grid{grid-template-columns:1fr;}}
+
+.why-card{
+  background:var(--bg);
+  padding:56px 48px;
+  position:relative;overflow:hidden;
   opacity:0;
-  transform:translateY(50px) perspective(600px) rotateX(12deg);
 }
-.pillar-card::before {
-  content:''; position:absolute; inset:0; opacity:0;
-  transition:opacity .3s; pointer-events:none;
-}
-/* unique gradient per card */
-.pillar-card:nth-child(1)::before{background:linear-gradient(135deg,rgba(129,140,248,.12),transparent 60%);}
-.pillar-card:nth-child(2)::before{background:linear-gradient(135deg,rgba(255,155,33,.12),transparent 60%);}
-.pillar-card:nth-child(3)::before{background:linear-gradient(135deg,rgba(251,191,36,.1),transparent 60%);}
-.pillar-card:nth-child(4)::before{background:linear-gradient(135deg,rgba(192,132,252,.12),transparent 60%);}
-.pillar-card:nth-child(5)::before{background:linear-gradient(135deg,rgba(45,253,197,.1),transparent 60%);}
-.pillar-card:nth-child(6)::before{background:linear-gradient(135deg,rgba(74,222,128,.1),transparent 60%);}
-.pillar-card:nth-child(7)::before{background:linear-gradient(135deg,rgba(255,155,33,.1),transparent 60%);}
-.pillar-card:nth-child(8)::before{background:linear-gradient(135deg,rgba(56,189,248,.1),transparent 60%);}
-.pillar-card:nth-child(9)::before{background:linear-gradient(135deg,rgba(192,132,252,.14),transparent 60%);}
-.pillar-card:hover::before{opacity:1;}
-
-/* top accent line per card */
-.pillar-card::after {
-  content:''; position:absolute;
-  top:0; left:0; right:0; height:3px;
-  opacity:0; transition:opacity .3s;
-}
-.pillar-card:nth-child(1)::after{background:var(--indigo); opacity:1;}
-.pillar-card:nth-child(2)::after{background:var(--saffron); opacity:1;}
-.pillar-card:nth-child(3)::after{background:var(--gold); opacity:1;}
-.pillar-card:nth-child(4)::after{background:var(--violet); opacity:1;}
-.pillar-card:nth-child(5)::after{background:var(--teal); opacity:1;}
-.pillar-card:nth-child(6)::after{background:var(--green); opacity:1;}
-.pillar-card:nth-child(7)::after{background:linear-gradient(90deg,var(--saffron),var(--red)); opacity:1;}
-.pillar-card:nth-child(8)::after{background:var(--blue); opacity:1;}
-.pillar-card:nth-child(9)::after{background:linear-gradient(90deg,var(--violet),var(--pink)); opacity:1;}
-
-.pillar-icon {
-  font-size:38px; display:block;
-  margin-bottom:20px; line-height:1;
-}
-.pillar-n {
-  font-family:var(--mono); font-size:9px; letter-spacing:3px;
-  text-transform:uppercase; color:rgba(255,255,255,.2);
-  margin-bottom:8px;
-}
-.pillar-name {
-  font-family:var(--syne); font-weight:700;
-  font-size:18px; letter-spacing:-.3px;
-  margin-bottom:12px; line-height:1.2;
-}
-.pillar-desc {
-  font-size:13.5px; color:var(--ink-dim);
-  line-height:1.65;
-}
-
-/* ─── AUDIENCE ─────────────────────────────────────── */
-#for-whom {
-  padding:120px 0; overflow:hidden;
-  position:relative;
-}
-/* full-width colorful bg strips per audience */
-.audience-grid {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:0;
-  border:2px solid rgba(255,255,255,.06);
-}
-@media(max-width:860px){ .audience-grid{grid-template-columns:1fr;} }
-
-.audience-card {
-  padding:56px 40px;
-  border-right:1px solid rgba(255,255,255,.06);
-  position:relative; overflow:hidden;
-  opacity:0;
-  transform:perspective(800px) rotateY(15deg);
-}
-.audience-card:last-child{border-right:none;}
-@media(max-width:860px){ .audience-card{border-right:none;border-bottom:1px solid rgba(255,255,255,.06);} }
-
-.audience-card:nth-child(1){background:linear-gradient(160deg,rgba(255,155,33,.08),transparent 60%);}
-.audience-card:nth-child(2){background:linear-gradient(160deg,rgba(45,253,197,.07),transparent 60%);}
-.audience-card:nth-child(3){background:linear-gradient(160deg,rgba(192,132,252,.08),transparent 60%);}
-
-.aud-top-bar {
-  height:4px; width:60px; margin-bottom:32px;
-}
-.aud-bar-1{background:linear-gradient(90deg,var(--saffron),var(--gold));}
-.aud-bar-2{background:linear-gradient(90deg,var(--teal),var(--blue));}
-.aud-bar-3{background:linear-gradient(90deg,var(--violet),var(--pink));}
-
-.aud-num {
-  font-family:var(--syne); font-weight:800; font-size:72px;
-  line-height:1; margin-bottom:16px;
-  -webkit-text-stroke:2px currentColor; color:transparent;
-  opacity:.15;
-}
-.aud-num-1{color:var(--saffron);}
-.aud-num-2{color:var(--teal);}
-.aud-num-3{color:var(--violet);}
-
-.aud-emoji{ font-size:48px; display:block; margin-bottom:20px; line-height:1; }
-.aud-title {
-  font-family:var(--syne); font-weight:800;
-  font-size:22px; letter-spacing:-.5px;
-  text-transform:uppercase; margin-bottom:14px;
-  line-height:1.1;
-}
-.aud-title-1{color:var(--saffron);}
-.aud-title-2{color:var(--teal);}
-.aud-title-3{color:var(--violet);}
-.aud-desc {
-  font-size:14.5px; color:var(--ink-dim);
-  line-height:1.7;
-}
-.aud-tag {
-  display:inline-block; margin-top:24px;
-  font-family:var(--mono); font-size:9.5px; letter-spacing:1.5px;
-  text-transform:uppercase; padding:6px 14px;
-  border:1.5px solid; font-weight:700;
-}
-.aud-tag-1{border-color:var(--saffron);color:var(--saffron);}
-.aud-tag-2{border-color:var(--teal);color:var(--teal);}
-.aud-tag-3{border-color:var(--violet);color:var(--violet);}
-
-/* ─── WHY FOLLOW ───────────────────────────────────── */
-#why {
-  padding:120px 0; overflow:hidden;
-  background:#030812;
-  border-top:2px solid rgba(255,255,255,.04);
-  position:relative;
-}
-#why::before {
+.why-card::after{
   content:'';
-  position:absolute; inset:0;
+  position:absolute;top:0;left:0;right:0;height:2px;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .5s cubic-bezier(.22,.68,0,1.2);
+}
+.why-card:hover::after{transform:scaleX(1);}
+.why-card:nth-child(1)::after{background:var(--yellow);}
+.why-card:nth-child(2)::after{background:var(--coral);}
+.why-card:nth-child(3)::after{background:var(--cyan);}
+.why-card:nth-child(4)::after{background:var(--purple);}
+
+.why-n{
+  font-family:var(--mono);font-size:72px;font-weight:700;
+  line-height:1;color:transparent;
+  -webkit-text-stroke:1px rgba(255,255,255,.06);
+  margin-bottom:20px;display:block;
+}
+.why-icon{font-size:36px;display:block;margin-bottom:20px;}
+.why-title{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(18px,2.2vw,26px);letter-spacing:-.5px;
+  margin-bottom:16px;text-transform:uppercase;
+}
+.why-card:nth-child(1) .why-title{color:var(--yellow);}
+.why-card:nth-child(2) .why-title{color:var(--coral);}
+.why-card:nth-child(3) .why-title{color:var(--cyan);}
+.why-card:nth-child(4) .why-title{color:var(--purple);}
+.why-text{
+  font-family:var(--serif);font-style:italic;
+  font-size:16px;color:rgba(255,255,255,.4);
+  line-height:1.8;
+}
+
+/* ── BIG CTA ────────────────────────────── */
+#cta{
+  padding:160px 0;
+  border-top:1px solid var(--border);
+  overflow:hidden;position:relative;
+}
+#cta::before{
+  content:'';position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(129,140,248,.08), transparent);
+    radial-gradient(ellipse 80% 60% at 50% 50%,rgba(237,255,0,.07),transparent),
+    radial-gradient(ellipse 50% 40% at 20% 80%,rgba(255,59,63,.07),transparent),
+    radial-gradient(ellipse 50% 40% at 80% 20%,rgba(0,240,255,.05),transparent);
   pointer-events:none;
 }
 
-.why-grid {
-  display:grid; grid-template-columns:repeat(2,1fr);
-  gap:2px; margin-top:64px;
-  border:2px solid rgba(255,255,255,.04);
-}
-@media(max-width:700px){ .why-grid{grid-template-columns:1fr;} }
+.cta-inner{position:relative;z-index:1;text-align:center;}
 
-.why-card {
-  padding:44px 40px;
-  position:relative; overflow:hidden;
-  opacity:0; transform:translateY(40px);
-  border:1px solid rgba(255,255,255,.04);
+.cta-overline{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--yellow);
+  margin-bottom:28px;display:block;
+  opacity:0;transform:translateY(20px);
 }
-.why-card:nth-child(1){background:linear-gradient(135deg,rgba(255,155,33,.06) 0%,transparent 60%);}
-.why-card:nth-child(2){background:linear-gradient(135deg,rgba(45,253,197,.05) 0%,transparent 60%);}
-.why-card:nth-child(3){background:linear-gradient(135deg,rgba(192,132,252,.06) 0%,transparent 60%);}
-.why-card:nth-child(4){background:linear-gradient(135deg,rgba(251,191,36,.05) 0%,transparent 60%);}
-
-.why-card-num {
-  position:absolute; top:16px; right:24px;
-  font-family:var(--mono); font-size:11px; letter-spacing:2px;
-  opacity:.2; color:var(--saffron);
-}
-.why-icon {
-  font-size:40px; display:block; margin-bottom:20px; line-height:1;
-}
-.why-title {
-  font-family:var(--syne); font-weight:700;
-  font-size:20px; letter-spacing:-.3px;
-  margin-bottom:12px;
-}
-.why-c1 .why-title { color:var(--saffron); }
-.why-c2 .why-title { color:var(--teal); }
-.why-c3 .why-title { color:var(--violet); }
-.why-c4 .why-title { color:var(--gold); }
-.why-text {
-  font-size:14.5px; color:var(--ink-dim);
-  line-height:1.75;
-}
-
-/* ─── BIG CTA ──────────────────────────────────────── */
-#cta {
-  padding:140px 0 160px;
-  text-align:center; overflow:hidden;
-  position:relative;
-  background:var(--black);
-}
-#cta::before {
-  content:'';
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 100% 80% at 50% 50%, rgba(255,155,33,.1), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 100%, rgba(192,132,252,.1), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(45,253,197,.08), transparent);
-  pointer-events:none;
-}
-#cta::after {
-  content:'';
-  position:absolute; inset:0;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(255,255,255,.02) 60px),
-    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(255,255,255,.02) 60px);
-  pointer-events:none;
-}
-
-.cta-inner { position:relative; z-index:1; }
-
-.cta-eyebrow {
-  font-family:var(--mono); font-size:10px; letter-spacing:3px;
-  text-transform:uppercase; color:var(--teal); margin-bottom:24px;
-  opacity:0;
-}
-.cta-h2 {
-  font-family:var(--syne); font-weight:800;
-  font-size:clamp(42px,8vw,100px);
-  line-height:.92; letter-spacing:-3px;
+.cta-h2{
+  font-family:var(--syne);font-weight:800;
+  font-size:clamp(52px,10vw,120px);
+  line-height:.88;letter-spacing:-4px;
   text-transform:uppercase;
-  margin:0 auto 16px;
-  opacity:0;
+  margin-bottom:32px;
+  opacity:0;transform:translateY(40px);
 }
-.cta-h2 .outline{-webkit-text-stroke:2px rgba(255,255,255,.3);color:transparent;}
-.cta-h2 .hot{color:var(--saffron);}
-.cta-h2 .cool{color:var(--teal);}
+.cta-h2 .y{color:var(--yellow);}
+.cta-h2 .o{-webkit-text-stroke:2px rgba(255,255,255,.2);color:transparent;}
+.cta-h2 .c{color:var(--coral);}
 
-.cta-tagline {
-  font-family:var(--play); font-style:italic;
-  font-size:clamp(18px,2.5vw,26px);
-  color:var(--ink-dim); margin:0 auto 20px;
-  opacity:0;
+.cta-italic{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(18px,2.5vw,28px);
+  color:rgba(255,255,255,.4);
+  margin-bottom:16px;display:block;
+  opacity:0;transform:translateY(20px);
 }
-.cta-tagline em { color:var(--gold); font-style:normal; }
+.cta-italic em{color:var(--yellow);font-style:normal;}
 
-.cta-sub {
-  font-size:17px; color:var(--ink-dim);
-  max-width:520px; margin:0 auto 60px;
-  line-height:1.75; opacity:0;
-}
-.cta-btns {
-  display:flex; flex-wrap:wrap; gap:16px;
-  justify-content:center; opacity:0;
+.cta-sub{
+  font-size:16px;color:rgba(255,255,255,.35);
+  max-width:500px;margin:0 auto 60px;
+  line-height:1.8;font-family:var(--serif);font-style:italic;
+  opacity:0;transform:translateY(20px);
 }
 
-.btn-cta-primary {
-  background:linear-gradient(90deg,var(--saffron),var(--saffron2));
-  color:var(--black); border:none; font-size:13px;
-  padding:18px 40px;
-  box-shadow:0 0 60px rgba(255,155,33,.2);
-}
-.btn-cta-primary:hover{
-  box-shadow:0 16px 56px rgba(255,107,0,.55);
-  transform:translateY(-5px) scale(1.02);
-}
-.btn-cta-li {
-  background:transparent; color:var(--blue);
-  border:2px solid var(--blue); font-size:13px;
-  padding:18px 40px;
-}
-.btn-cta-li:hover{background:rgba(56,189,248,.1);box-shadow:0 8px 32px rgba(56,189,248,.3);}
-.btn-cta-ig {
-  background:transparent; color:var(--pink);
-  border:2px solid var(--pink); font-size:13px;
-  padding:18px 40px;
-}
-.btn-cta-ig:hover{background:rgba(244,114,182,.1);box-shadow:0 8px 32px rgba(244,114,182,.3);}
-
-/* ─── SOCIAL STRIP ─────────────────────────────────── */
-.social-strip {
-  margin-top:64px; padding-top:48px;
-  border-top:1px solid rgba(255,255,255,.06);
-  display:flex; justify-content:center; gap:0; flex-wrap:wrap;
-  opacity:0;
-}
-.social-tile {
-  display:flex; align-items:center; gap:14px;
-  padding:20px 48px;
-  border:1px solid rgba(255,255,255,.06);
-  transition:.25s; cursor:pointer;
-}
-.social-tile:hover { transform:translateY(-4px); }
-.st-li { background:rgba(10,102,194,.08); }
-.st-li:hover { background:rgba(10,102,194,.2); border-color:rgba(10,102,194,.4); }
-.st-ig { background:rgba(225,48,108,.06); }
-.st-ig:hover { background:rgba(225,48,108,.18); border-color:rgba(225,48,108,.35); }
-.st-blog { background:rgba(255,155,33,.08); }
-.st-blog:hover { background:rgba(255,155,33,.2); border-color:rgba(255,155,33,.4); }
-.st-icon { font-size:28px; }
-.st-text { text-align:left; }
-.st-handle {
-  font-family:var(--mono); font-size:11px;
-  letter-spacing:1px; text-transform:uppercase;
-  margin-bottom:4px;
-}
-.st-li .st-handle { color:#70b5f9; }
-.st-ig .st-handle { color:var(--pink); }
-.st-blog .st-handle { color:var(--saffron); }
-.st-desc { font-size:12px; color:var(--ink-dim); }
-
-/* ─── FOOTER ───────────────────────────────────────── */
-footer {
-  position:relative; z-index:2;
-  background:#020409;
-  border-top:3px solid var(--saffron);
-  padding:40px 48px;
-  display:flex; align-items:center; justify-content:space-between;
-  flex-wrap:wrap; gap:16px;
-}
-@media(max-width:600px){ footer{padding:28px 20px;flex-direction:column;} }
-
-.foot-brand {
-  display:flex; align-items:center; gap:14px;
-}
-.foot-mark {
-  width:36px; height:36px;
-  background:linear-gradient(135deg,var(--saffron),var(--violet));
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--syne); font-weight:800; font-size:18px; color:var(--black);
-  clip-path:polygon(0 0,100% 0,100% 75%,75% 100%,0 100%);
-}
-.foot-name {
-  font-family:var(--syne); font-weight:800; font-size:14px;
-  letter-spacing:.5px; text-transform:uppercase;
-}
-.foot-sub {
-  font-family:var(--mono); font-size:9.5px; letter-spacing:1.5px;
-  text-transform:uppercase; color:var(--saffron); margin-top:3px;
-}
-.foot-mid {
-  font-family:var(--play); font-style:italic;
-  font-size:18px; color:rgba(255,255,255,.15);
-  text-align:center;
-}
-.foot-mid em { color:rgba(255,155,33,.35); font-style:normal; }
-.foot-copy {
-  font-family:var(--mono); font-size:10px;
-  color:rgba(255,255,255,.18); letter-spacing:.5px; text-align:right;
+.cta-btns{
+  display:flex;flex-wrap:wrap;gap:14px;
+  justify-content:center;
+  opacity:0;transform:translateY(20px);
 }
 
-/* ─── CANVAS / CURSOR ──────────────────────────────── */
-.cursor-glow {
-  position:fixed; width:400px; height:400px; border-radius:50%;
-  background:radial-gradient(circle, rgba(255,155,33,.04) 0%, transparent 65%);
-  pointer-events:none; z-index:1;
-  transform:translate(-50%,-50%);
+/* social links strip */
+.cta-strip{
+  margin-top:80px;padding-top:64px;
+  border-top:1px solid var(--border);
+  display:flex;justify-content:center;flex-wrap:wrap;
+  opacity:0;transform:translateY(20px);
+}
+.strip-item{
+  display:flex;align-items:center;gap:16px;
+  padding:24px 48px;border:1px solid var(--border);
+  margin:-1px 0 0 -1px;
+  transition:.25s;cursor:pointer;
+}
+.strip-item:hover{transform:translateY(-4px);z-index:2;}
+.si-li:hover{background:rgba(10,102,194,.1);border-color:rgba(10,102,194,.4);}
+.si-ig:hover{background:rgba(225,48,108,.08);border-color:rgba(225,48,108,.3);}
+.si-blog:hover{background:rgba(237,255,0,.06);border-color:rgba(237,255,0,.3);}
+.strip-icon{font-size:28px;}
+.strip-text{text-align:left;}
+.strip-handle{
+  font-family:var(--mono);font-size:11px;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:4px;
+}
+.si-li .strip-handle{color:#70b5f9;}
+.si-ig .strip-handle{color:var(--pink);}
+.si-blog .strip-handle{color:var(--yellow);}
+.strip-sub{font-size:12px;color:var(--muted);}
+
+/* ── FOOTER ─────────────────────────────── */
+footer{
+  position:relative;z-index:2;
+  background:var(--bg);
+  border-top:2px solid var(--yellow);
+  padding:36px 64px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+@media(max-width:640px){footer{padding:24px;flex-direction:column;text-align:center;}}
+.foot-brand{display:flex;align-items:center;gap:12px;}
+.foot-M{
+  width:32px;height:32px;background:var(--yellow);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:16px;color:var(--bg);
+  clip-path:polygon(0 0,100% 0,85% 100%,0 100%);
+}
+.foot-name{
+  font-weight:800;font-size:13px;letter-spacing:.5px;
+  text-transform:uppercase;
+}
+.foot-sub{
+  font-family:var(--mono);font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--yellow);margin-top:3px;
+}
+.foot-mid{
+  font-family:var(--serif);font-style:italic;
+  font-size:16px;color:rgba(255,255,255,.2);
+}
+.foot-mid em{color:rgba(237,255,0,.3);font-style:normal;}
+.foot-copy{
+  font-family:var(--mono);font-size:9px;letter-spacing:.5px;
+  color:rgba(255,255,255,.2);text-align:right;
 }
 </style>
 </head>
 <body>
 
-<div class="cursor-glow" id="cursorGlow"></div>
-<canvas id="canvas-bg"></canvas>
+<!-- 3D SPIRAL CANVAS -->
+<canvas id="spiral-canvas"></canvas>
 
-<!-- ═══ NAV ════════════════════════════════════════════ -->
+<!-- NAV -->
 <nav id="nav">
-  <div class="nav-logo-wrap">
-    <div class="nav-mark">M</div>
+  <div class="nav-logo">
+    <div class="nav-M">M</div>
     <div class="nav-wordmark">
       MBA India Daily
       <span>Business Intelligence</span>
     </div>
   </div>
-  <div class="nav-right">
-    <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="nbtn nbtn-ghost">LinkedIn</a>
-    <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="nbtn nbtn-ghost">Instagram</a>
-    <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="nbtn nbtn-hot">Today's Edition →</a>
+  <div class="nav-links">
+    <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="nl">LinkedIn</a>
+    <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="nl">Instagram</a>
+    <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="nl nl-cta">Today's Edition →</a>
   </div>
 </nav>
 
-<!-- ═══ HERO ════════════════════════════════════════════ -->
-<div class="outer">
-<section id="hero">
-  <div class="hero-corner-tl"></div>
-  <div class="hero-corner-br"></div>
-  <div class="hero-ring-1"></div>
-  <div class="hero-ring-2"></div>
+<div id="page">
 
-  <div class="hero-kicker" id="heroKicker">
-    <span class="kicker-dot"></span>
-    India's Sharpest MBA Newsletter
+<!-- ═══ HERO ═══════════════════════════════ -->
+<section id="hero">
+  <div class="brkt brkt-tl"></div>
+  <div class="brkt brkt-tr"></div>
+  <div class="brkt brkt-br"></div>
+
+  <div class="hero-index" id="hero-index">
+    <span class="hero-index-dot"></span>
+    India's Sharpest MBA Newsletter &nbsp;—&nbsp; Est. 2025
   </div>
 
-  <h1 class="hero-h1" id="heroH1">
-    <span class="line-saffron">Business</span>
-    <span class="line-outline">Intelligence</span>
-    <span class="line-teal">Daily.</span>
+  <h1 class="hero-h1" id="hero-h1">
+    <span class="line"><span class="line-inner h1-yellow">Business</span></span>
+    <span class="line"><span class="line-inner h1-outline">Intelligence</span></span>
+    <span class="line"><span class="line-inner h1-coral">Daily.</span></span>
   </h1>
 
-  <p class="hero-tagline" id="heroTagline">
-    Understand the Economy. <em>Not Just the Headlines.</em>
-  </p>
-
-  <p class="hero-sub" id="heroSub">
-    Every morning, MBA India Daily turns India's complex economic events into clear, sharp intelligence — crafted specifically for MBA aspirants, students, and young managers who want to think differently.
-  </p>
-
-  <div class="hero-ctas" id="heroCtas">
-    <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-primary">
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
-      Read Today's Edition
-    </a>
-    <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-li">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      LinkedIn
-    </a>
-    <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-ig">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-      Instagram
-    </a>
-  </div>
-
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    <span class="scroll-txt">Scroll</span>
+  <div class="hero-bottom">
+    <p class="hero-desc" id="hero-desc">
+      Every morning, we turn India's complex economy into your<br>
+      <em>sharpest competitive advantage.</em>
+    </p>
+    <div class="hero-ctas" id="hero-ctas">
+      <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+        Read Today
+      </a>
+      <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-c">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cv">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        Instagram
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- ═══ MARQUEE ══════════════════════════════════════════ -->
-<div class="marquee-band">
-  <div class="marquee-track">
-    <span class="mitem">Finance</span><span class="mitem sep">✦</span>
-    <span class="mitem">Marketing</span><span class="mitem sep">✦</span>
-    <span class="mitem">Operations</span><span class="mitem sep">✦</span>
-    <span class="mitem">HR & Leadership</span><span class="mitem sep">✦</span>
-    <span class="mitem">Tech & AI</span><span class="mitem sep">✦</span>
-    <span class="mitem">Startups</span><span class="mitem sep">✦</span>
-    <span class="mitem">India Economy</span><span class="mitem sep">✦</span>
-    <span class="mitem">Global Markets</span><span class="mitem sep">✦</span>
-    <span class="mitem">Manager Insights</span><span class="mitem sep">✦</span>
-    <span class="mitem">Finance</span><span class="mitem sep">✦</span>
-    <span class="mitem">Marketing</span><span class="mitem sep">✦</span>
-    <span class="mitem">Operations</span><span class="mitem sep">✦</span>
-    <span class="mitem">HR & Leadership</span><span class="mitem sep">✦</span>
-    <span class="mitem">Tech & AI</span><span class="mitem sep">✦</span>
-    <span class="mitem">Startups</span><span class="mitem sep">✦</span>
-    <span class="mitem">India Economy</span><span class="mitem sep">✦</span>
-    <span class="mitem">Global Markets</span><span class="mitem sep">✦</span>
-    <span class="mitem">Manager Insights</span><span class="mitem sep">✦</span>
+<!-- MARQUEE (double row) -->
+<div style="position:relative;z-index:2;">
+  <div class="marquee">
+    <div class="marquee-row">
+      <span class="mq-item">Finance</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Marketing</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Operations</span><span class="mq-sep">✦</span>
+      <span class="mq-item">HR & Leadership</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Tech & AI</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Startups</span><span class="mq-sep">✦</span>
+      <span class="mq-item">India Economy</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Global Markets</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Manager Insights</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Finance</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Marketing</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Operations</span><span class="mq-sep">✦</span>
+      <span class="mq-item">HR & Leadership</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Tech & AI</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Startups</span><span class="mq-sep">✦</span>
+      <span class="mq-item">India Economy</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Global Markets</span><span class="mq-sep">✦</span>
+      <span class="mq-item">Manager Insights</span><span class="mq-sep">✦</span>
+    </div>
+  </div>
+  <div class="marquee" style="border-top:none;background:rgba(255,59,63,.03);">
+    <div class="marquee-row rev" style="color:var(--coral);">
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Understand the Economy</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Not Just the Headlines</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Think Like a Manager</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Every Morning</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Understand the Economy</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Not Just the Headlines</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Think Like a Manager</span><span class="mq-sep" style="color:var(--muted);">·</span>
+      <span class="mq-item" style="color:rgba(255,59,63,.5);">Every Morning</span><span class="mq-sep" style="color:var(--muted);">·</span>
+    </div>
   </div>
 </div>
 
-<!-- ═══ WHAT IS ═══════════════════════════════════════════ -->
-<section id="what">
-  <div class="what-stripe"></div>
-  <div class="wrap">
-    <div class="what-grid">
-      <div class="what-left">
-        <div class="sec-eyebrow" style="color:var(--saffron);">What is MBA India Daily?</div>
-        <h2 class="what-h2">
-          Not Just<br>
-          <span class="w-saffron">News.</span><br>
-          <span class="w-outline">Your Edge.</span>
-        </h2>
-        <p class="what-body">
-          MBA India Daily is a <span class="hl-teal">daily business intelligence channel</span> that translates India's complex economic landscape into sharp, structured insights.
-          <br><br>
-          We don't just report what happened. We explain <strong>why it matters</strong>, <strong>what managers should do</strong> about it, and <strong>how it connects</strong> to India's bigger growth story.
-          <br><br>
-          Think of it as your <span class="hl-saffron">morning briefing</span> — before lectures, before meetings, before the market opens.
-        </p>
+<!-- ═══ HORIZONTAL SCROLL ═══════════════════ -->
+<div id="hscroll-wrap">
+  <div id="hscroll-pin">
+    <div class="hscroll-track" id="htrack">
+
+      <!-- Panel 1 : What We Are -->
+      <div class="hpanel hp-1">
+        <div class="hpanel-bg-num">01</div>
+        <div class="hpanel-inner">
+          <div class="hpanel-index">01 / What We Are</div>
+          <h2 class="hpanel-h2">
+            Daily<br>
+            <em>Business</em><br>
+            <span class="hpanel-outline">Intelligence</span>
+          </h2>
+          <p class="hpanel-body">
+            MBA India Daily is <strong>not a news app.</strong> It's a daily briefing that translates complex economic events into sharp, structured insights — written for people who want to understand why things happen, not just what happened.
+          </p>
+          <span class="hpanel-tag">Business Intelligence</span>
+        </div>
+        <div class="hscroll-progress">
+          <div class="hp-dot active" data-i="0"></div>
+          <div class="hp-dot" data-i="1"></div>
+          <div class="hp-dot" data-i="2"></div>
+          <div class="hp-dot" data-i="3"></div>
+          <div class="hp-dot" data-i="4"></div>
+        </div>
       </div>
-      <div class="what-right">
-        <div class="stat-block" id="statBlock">
-          <div class="stat-corner tl"></div>
-          <div class="stat-corner br"></div>
-          <div class="stat-item">
-            <div class="stat-num sn-saffron">9+</div>
-            <div class="stat-lbl">Business domains covered daily — Finance, Marketing, Ops, HR, Tech & more</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num sn-teal">Daily</div>
-            <div class="stat-lbl">Fresh edition every morning. Never behind on what matters.</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num sn-violet">MBA</div>
-            <div class="stat-lbl">Built specifically for MBA & PGDM students and aspirants across India</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num sn-gold">India</div>
-            <div class="stat-lbl">100% India-first lens. Global news filtered for your career reality.</div>
+
+      <!-- Panel 2 : Our Mission -->
+      <div class="hpanel hp-2">
+        <div class="hpanel-bg-num">02</div>
+        <div class="hpanel-inner">
+          <div class="hpanel-index">02 / Our Mission</div>
+          <h2 class="hpanel-h2">
+            <span class="hpanel-outline">Close</span><br>
+            the<br>
+            <em>Knowledge Gap</em>
+          </h2>
+          <p class="hpanel-body">
+            The gap between what B-school teaches and what business actually demands is enormous. <strong>MBA India Daily exists to close that gap.</strong> One edition, every morning, covering 9 domains that every future manager must master.
+          </p>
+          <span class="hpanel-tag">9 Domains Covered Daily</span>
+        </div>
+      </div>
+
+      <!-- Panel 3 : India Focus -->
+      <div class="hpanel hp-3">
+        <div class="hpanel-bg-num">03</div>
+        <div class="hpanel-inner">
+          <div class="hpanel-index">03 / India First</div>
+          <h2 class="hpanel-h2">
+            <em>India's</em><br>
+            <span class="hpanel-outline">Economy,</span><br>
+            Your Lens
+          </h2>
+          <p class="hpanel-body">
+            Unlike global business media, we filter <strong>every story</strong> through India's economic reality — the policies, the sectors, and the companies that will actually shape your career in the next decade.
+          </p>
+          <span class="hpanel-tag">India-First Intelligence</span>
+        </div>
+      </div>
+
+      <!-- Panel 4 : How We Write -->
+      <div class="hpanel hp-4">
+        <div class="hpanel-bg-num">04</div>
+        <div class="hpanel-inner">
+          <div class="hpanel-index">04 / How We Write</div>
+          <h2 class="hpanel-h2">
+            Why it<br>
+            <em>Matters.</em><br>
+            <span class="hpanel-outline">What to Do.</span>
+          </h2>
+          <p class="hpanel-body">
+            Every story has three layers: <strong>what happened</strong>, <strong>why it matters</strong>, and <strong>what a manager should do</strong> about it. We don't just report — we build the mental model that helps you think differently.
+          </p>
+          <span class="hpanel-tag">3-Layer Analysis</span>
+        </div>
+      </div>
+
+      <!-- Panel 5 : Follow Us -->
+      <div class="hpanel hp-5">
+        <div class="hpanel-bg-num">05</div>
+        <div class="hpanel-inner">
+          <div class="hpanel-index">05 / Join Us</div>
+          <h2 class="hpanel-h2">
+            <span class="hpanel-outline">Start</span><br>
+            <em>Today.</em><br>
+            It's Free.
+          </h2>
+          <p class="hpanel-body">
+            Follow MBA India Daily on <strong>LinkedIn and Instagram</strong> for daily visual intelligence. Read the full edition every morning. Share with a batchmate who wants to think sharper.
+          </p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y" style="font-size:10px;padding:12px 22px;">Read Today →</a>
+            <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-c" style="font-size:10px;padding:12px 22px;">LinkedIn</a>
+            <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cv" style="font-size:10px;padding:12px 22px;">Instagram</a>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══ HORIZONTAL BANNER ════════════════════════════════ -->
-<div class="horiz-banner" id="horizBanner">
-  <div class="horiz-inner" id="horizInner">
-    <span class="horiz-item">Understand the Economy</span>
-    <span class="horiz-item lit">·</span>
-    <span class="horiz-item saffron-txt">Not Just the Headlines</span>
-    <span class="horiz-item lit">·</span>
-    <span class="horiz-item">Think Like a Manager</span>
-    <span class="horiz-item lit">·</span>
-    <span class="horiz-item saffron-txt">Understand the Economy</span>
-    <span class="horiz-item lit">·</span>
-    <span class="horiz-item">Not Just the Headlines</span>
-    <span class="horiz-item lit">·</span>
-    <span class="horiz-item">Think Like a Manager</span>
-    <span class="horiz-item lit">·</span>
-  </div>
-</div>
+    </div><!-- htrack -->
+  </div><!-- hscroll-pin -->
+</div><!-- hscroll-wrap -->
 
-<!-- ═══ PILLARS ══════════════════════════════════════════ -->
+<!-- ═══ PILLARS ══════════════════════════════ -->
 <section id="pillars">
-  <div class="deco-num">09</div>
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-intro">
       <div>
-        <div class="sec-eyebrow" style="color:var(--teal);">What We Cover</div>
-        <h2 class="sec-h2">
-          Every domain<br>
-          <span class="outline">a manager</span><br>
-          <span class="colored">must master.</span>
+        <div class="s-label" style="color:var(--yellow);">What We Cover</div>
+        <h2 class="sec-big-h2 word-reveal" id="pillars-h2">
+          <span class="outline">Every</span><br>
+          <span class="yellow">Domain.</span><br>
+          <span class="coral">Covered.</span><br>
+          <span class="outline">Daily.</span>
         </h2>
       </div>
-      <p class="sec-sub">Nine business pillars. Covered daily. Explained for real-world decisions — not just exam prep.</p>
+      <p class="sec-right-desc">
+        Nine business pillars — Finance, Marketing, Operations, HR, Tech, Startups, India Economy, Global Markets, and Manager Insights. Every single morning. Written for <em>real application</em>, not just exam preparation.
+      </p>
     </div>
 
-    <div class="pillars-grid" id="pillarsGrid">
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">01 / Finance</div>
-        <span class="pillar-icon">📈</span>
-        <div class="pillar-name">Finance & Banking</div>
-        <div class="pillar-desc">IPOs, capital raises, banking sector moves, RBI decisions, and what every number signals for your investments and career.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">02 / Marketing</div>
-        <span class="pillar-icon">📣</span>
-        <div class="pillar-name">Marketing</div>
-        <div class="pillar-desc">Brand strategies, creator economy, sports marketing, D2C playbooks — the campaigns every future CMO should study.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">03 / Operations</div>
-        <span class="pillar-icon">🏭</span>
-        <div class="pillar-name">Ops & Supply Chain</div>
-        <div class="pillar-desc">Manufacturing trends, logistics tech, packaging, procurement — the infrastructure India is building at scale.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">04 / People</div>
-        <span class="pillar-icon">👔</span>
-        <div class="pillar-name">HR & Leadership</div>
-        <div class="pillar-desc">CEO transitions, turnaround leadership, PE exits, talent strategy — lessons every future manager must absorb now.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">05 / Technology</div>
-        <span class="pillar-icon">🤖</span>
-        <div class="pillar-name">Tech & AI</div>
-        <div class="pillar-desc">GovTech, AI tools, no-code platforms, sports tech — how India's digital transformation is reshaping every business.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">06 / Startups</div>
-        <span class="pillar-icon">🚀</span>
-        <div class="pillar-name">Startups</div>
-        <div class="pillar-desc">Unicorns, funding rounds, IPOs, founder lessons — the playbooks shaping India's next decade of growth.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">07 / Macro</div>
-        <span class="pillar-icon">🇮🇳</span>
-        <div class="pillar-name">India Economy</div>
-        <div class="pillar-desc">GDP signals, PMI data, employment trends, R&D gaps — the macro picture underlying every business decision in India.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">08 / Global</div>
-        <span class="pillar-icon">🌐</span>
-        <div class="pillar-name">Global → India</div>
-        <div class="pillar-desc">US-China tensions, oil crises, global M&A — filtered through what it actually means for India's economy and your career.</div>
-      </div>
-
-      <div class="pillar-card" data-tilt>
-        <div class="pillar-n">09 / Insights</div>
-        <span class="pillar-icon">🧠</span>
-        <div class="pillar-name">Manager's Takeaways</div>
-        <div class="pillar-desc">Every edition ends with 6 deep insights — philosophy, mental models, and career frameworks for the future manager.</div>
-      </div>
-
+    <div class="pillars-grid" id="pillars-grid">
+      <div class="pc"><div class="pc-num">01 / Finance</div><span class="pc-icon">📈</span><div class="pc-name">Finance & Banking</div><div class="pc-desc">IPOs, capital raises, RBI decisions, banking sector moves — what every number signals for your career and investments.</div></div>
+      <div class="pc"><div class="pc-num">02 / Marketing</div><span class="pc-icon">📣</span><div class="pc-name">Marketing</div><div class="pc-desc">Brand strategies, creator economy, sports marketing, D2C playbooks — campaigns every future CMO must study.</div></div>
+      <div class="pc"><div class="pc-num">03 / Operations</div><span class="pc-icon">🏭</span><div class="pc-name">Ops & Supply Chain</div><div class="pc-desc">Manufacturing, logistics tech, packaging, procurement — the infrastructure India is building at speed.</div></div>
+      <div class="pc"><div class="pc-num">04 / People</div><span class="pc-icon">👔</span><div class="pc-name">HR & Leadership</div><div class="pc-desc">CEO transitions, turnaround leadership, PE exits — lessons every future manager must absorb now.</div></div>
+      <div class="pc"><div class="pc-num">05 / Technology</div><span class="pc-icon">🤖</span><div class="pc-name">Tech & AI</div><div class="pc-desc">GovTech, AI tools, no-code platforms — how India's digital transformation reshapes every sector.</div></div>
+      <div class="pc"><div class="pc-num">06 / Startups</div><span class="pc-icon">🚀</span><div class="pc-name">Startups</div><div class="pc-desc">Unicorns, funding rounds, IPOs, founder lessons — the playbooks shaping India's next decade.</div></div>
+      <div class="pc"><div class="pc-num">07 / Macro</div><span class="pc-icon">🇮🇳</span><div class="pc-name">India Economy</div><div class="pc-desc">GDP signals, PMI, employment trends, R&D gaps — the macro picture driving every business decision.</div></div>
+      <div class="pc"><div class="pc-num">08 / Global</div><span class="pc-icon">🌐</span><div class="pc-name">Global → India</div><div class="pc-desc">Oil, trade wars, global M&A — filtered through the lens of what it means for India and your career.</div></div>
+      <div class="pc"><div class="pc-num">09 / Insights</div><span class="pc-icon">🧠</span><div class="pc-name">Manager's Takeaways</div><div class="pc-desc">6 deep insights every edition — philosophy, mental models, and frameworks for the future manager.</div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ FOR WHOM ══════════════════════════════════════════ -->
+<!-- ═══ AUDIENCE ══════════════════════════════ -->
 <section id="for-whom">
   <div class="wrap">
-    <div class="sec-eyebrow" style="color:var(--violet);margin-bottom:16px;">Who It's For</div>
-    <h2 class="sec-h2" style="margin-bottom:56px;">
-      Built for<br>
-      <span style="color:var(--violet);">three types</span><br>
-      <span style="-webkit-text-stroke:2px rgba(255,255,255,.25);color:transparent;">of sharp minds.</span>
-    </h2>
-  </div>
-  <div class="audience-grid" id="audienceGrid">
+    <div class="s-label" style="color:var(--coral);margin-bottom:56px;">Who It's For</div>
+    <div class="aud-wrap" id="aud-wrap">
 
-    <div class="audience-card">
-      <div class="aud-top-bar aud-bar-1"></div>
-      <div class="aud-num aud-num-1">01</div>
-      <span class="aud-emoji">🎯</span>
-      <div class="aud-title aud-title-1">MBA Aspirants</div>
-      <div class="aud-desc">Preparing for CAT, XAT, GMAT, or GD-PI rounds? MBA India Daily gives you real case studies, live data, and the business fluency that makes panelists lean forward in their seats.</div>
-      <span class="aud-tag aud-tag-1">Aspirants</span>
+      <div class="aud-row">
+        <div class="aud-idx">01</div>
+        <div class="aud-left">
+          <span class="aud-emoji">🎯</span>
+          <div class="aud-title">MBA Aspirants</div>
+          <span class="aud-tag">CAT · XAT · GMAT</span>
+        </div>
+        <div class="aud-right">
+          <p class="aud-desc">Preparing for entrance exams or GD-PI rounds? MBA India Daily gives you <strong>real case studies, live data, and the business fluency</strong> that makes interview panels lean forward. Your competition reads textbooks. You'll read reality.</p>
+        </div>
+      </div>
+
+      <div class="aud-row">
+        <div class="aud-idx">02</div>
+        <div class="aud-left">
+          <span class="aud-emoji">🎓</span>
+          <div class="aud-title">MBA & PGDM Students</div>
+          <span class="aud-tag">B-School · PGDM</span>
+        </div>
+        <div class="aud-right">
+          <p class="aud-desc">Bridge the gap between textbook frameworks and what's actually happening in the market. <strong>Your professor teaches Porter's Five Forces.</strong> MBA India Daily shows you where it's running live in India's economy right now.</p>
+        </div>
+      </div>
+
+      <div class="aud-row">
+        <div class="aud-idx">03</div>
+        <div class="aud-left">
+          <span class="aud-emoji">💼</span>
+          <div class="aud-title">Young Managers</div>
+          <span class="aud-tag">Corporate · Future Leaders</span>
+        </div>
+        <div class="aud-right">
+          <p class="aud-desc">Just started your corporate journey? MBA India Daily keeps you <strong>sharper than your senior colleagues</strong> — because you actually understand the macro context driving every business decision in every meeting you walk into.</p>
+        </div>
+      </div>
+
     </div>
-
-    <div class="audience-card">
-      <div class="aud-top-bar aud-bar-2"></div>
-      <div class="aud-num aud-num-2">02</div>
-      <span class="aud-emoji">🎓</span>
-      <div class="aud-title aud-title-2">MBA & PGDM Students</div>
-      <div class="aud-desc">Bridge the gap between textbook theory and what's actually happening in the market. Your professor teaches frameworks; MBA India Daily shows you where those frameworks are running live.</div>
-      <span class="aud-tag aud-tag-2">Students</span>
-    </div>
-
-    <div class="audience-card">
-      <div class="aud-top-bar aud-bar-3"></div>
-      <div class="aud-num aud-num-3">03</div>
-      <span class="aud-emoji">💼</span>
-      <div class="aud-title aud-title-3">Young & Future Managers</div>
-      <div class="aud-desc">Just started your corporate journey? MBA India Daily keeps you sharper than your senior colleagues — you actually understand the macro context driving every business decision around you.</div>
-      <span class="aud-tag aud-tag-3">Professionals</span>
-    </div>
-
   </div>
 </section>
 
-<!-- ═══ WHY FOLLOW ════════════════════════════════════════ -->
+<!-- ═══ WHY FOLLOW ════════════════════════════ -->
 <section id="why">
   <div class="wrap">
-    <div class="sec-eyebrow" style="color:var(--gold);margin-bottom:16px;">Why Follow Us</div>
-    <h2 class="sec-h2">
-      Four reasons<br>
-      <span style="color:var(--gold);">to join</span><br>
-      <span style="-webkit-text-stroke:2px rgba(255,255,255,.25);color:transparent;">the community.</span>
+    <div class="s-label" style="color:var(--cyan);">Why Follow</div>
+    <h2 class="sec-big-h2 word-reveal" style="margin-bottom:0;" id="why-h2">
+      Four Reasons<br>
+      <span class="cyan">to Join</span><br>
+      <span class="outline">the Community.</span>
     </h2>
-
-    <div class="why-grid" id="whyGrid">
-
-      <div class="why-card why-c1">
-        <span class="why-card-num">01</span>
+    <div class="why-grid" id="why-grid">
+      <div class="why-card">
+        <span class="why-n">01</span>
         <span class="why-icon">⚡</span>
-        <div class="why-title">5-minute edge, every morning</div>
-        <div class="why-text">Each edition is structured to be read in under 5 minutes — but leaves you with the context it takes others hours of reading to build.</div>
+        <div class="why-title">5-Minute Edge, Every Morning</div>
+        <p class="why-text">Each edition is structured to be read in under 5 minutes — but leaves you with the kind of context it takes others hours of reading to build. Start every day sharper than you ended the last.</p>
       </div>
-
-      <div class="why-card why-c2">
-        <span class="why-card-num">02</span>
+      <div class="why-card">
+        <span class="why-n">02</span>
         <span class="why-icon">🔗</span>
-        <div class="why-title">Connections, not just stories</div>
-        <div class="why-text">We connect the dots between seemingly unrelated events — because real business decisions happen at the intersection of Finance, Policy, Tech, and Human behaviour simultaneously.</div>
+        <div class="why-title">Connections, Not Just Stories</div>
+        <p class="why-text">We map how an oil price shock in West Asia connects to an FMCG brand's margin in Mumbai. Real business decisions happen at intersections. We show you the map, not just the roads.</p>
       </div>
-
-      <div class="why-card why-c3">
-        <span class="why-card-num">03</span>
+      <div class="why-card">
+        <span class="why-n">03</span>
         <span class="why-icon">🎓</span>
-        <div class="why-title">Career-ready frameworks</div>
-        <div class="why-text">Every takeaway is tied to a real career or business implication. Read for 90 days and your interviews will sound like a different class of candidate entirely.</div>
+        <div class="why-title">Career-Ready Frameworks</div>
+        <p class="why-text">Every takeaway is tied to a real career implication. Read us for 90 days and your interviews will sound like a different class of candidate. Your answers will have frameworks. Your competitors' won't.</p>
       </div>
-
-      <div class="why-card why-c4">
-        <span class="why-card-num">04</span>
+      <div class="why-card">
+        <span class="why-n">04</span>
         <span class="why-icon">🇮🇳</span>
-        <div class="why-title">India-first intelligence</div>
-        <div class="why-text">Unlike global business media, we filter everything through India's economic reality — the policies, the sectors, and the companies that will actually define your career.</div>
+        <div class="why-title">India-First Intelligence</div>
+        <p class="why-text">Unlike Harvard Business Review or Bloomberg, we filter everything through India's economic reality — the sectors, the policies, and the companies that will define the next 20 years of your working life.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ═══ BIG CTA ════════════════════════════════════════════ -->
+<!-- ═══ BIG CTA ════════════════════════════════ -->
 <section id="cta">
   <div class="wrap">
     <div class="cta-inner">
-      <div class="cta-eyebrow" id="ctaEyebrow">Start Today. It's Free.</div>
-      <h2 class="cta-h2" id="ctaH2">
-        <span class="outline">Your</span><br>
-        <span class="hot">daily</span><br>
-        <span class="cool">briefing.</span>
+      <span class="cta-overline" id="cta-over">Start Today. It's Free.</span>
+      <h2 class="cta-h2" id="cta-h2">
+        <span class="o">Your</span><br>
+        <span class="y">Daily</span><br>
+        <span class="c">Briefing.</span>
       </h2>
-      <p class="cta-tagline" id="ctaTagline">
+      <span class="cta-italic" id="cta-it">
         Understand the Economy. <em>Not Just the Headlines.</em>
-      </p>
-      <p class="cta-sub" id="ctaSub">
+      </span>
+      <p class="cta-sub" id="cta-sub">
         Follow MBA India Daily on LinkedIn and Instagram. Read today's edition. Share with a batchmate who wants to think sharper.
       </p>
-      <div class="cta-btns" id="ctaBtns">
-        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-cta-primary">
-          <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+      <div class="cta-btns" id="cta-btns">
+        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y" style="font-size:12px;padding:18px 40px;">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
           Read Today's Edition
         </a>
-        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-cta-li">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="btn btn-c" style="font-size:12px;padding:18px 40px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           Follow on LinkedIn
         </a>
-        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cta-ig">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="btn btn-cv" style="font-size:12px;padding:18px 40px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
           Follow on Instagram
         </a>
       </div>
 
-      <div class="social-strip" id="socialStrip">
-        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="social-tile st-li">
-          <span class="st-icon">💼</span>
-          <div class="st-text">
-            <div class="st-handle">LinkedIn</div>
-            <div class="st-desc">MBA India Daily · Follow for daily posts</div>
+      <div class="cta-strip" id="cta-strip">
+        <a href="https://www.linkedin.com/company/mbaindiadaily/" target="_blank" rel="noopener" class="strip-item si-li">
+          <span class="strip-icon">💼</span>
+          <div class="strip-text">
+            <div class="strip-handle">LinkedIn</div>
+            <div class="strip-sub">MBA India Daily · Follow for daily posts</div>
           </div>
         </a>
-        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="social-tile st-ig">
-          <span class="st-icon">📸</span>
-          <div class="st-text">
-            <div class="st-handle">@mbaindiadaily</div>
-            <div class="st-desc">Instagram · Follow for daily visuals</div>
+        <a href="https://www.instagram.com/mbaindiadaily?igsh=MW5taHl1eGRlN2U0Mw==" target="_blank" rel="noopener" class="strip-item si-ig">
+          <span class="strip-icon">📸</span>
+          <div class="strip-text">
+            <div class="strip-handle">@mbaindiadaily</div>
+            <div class="strip-sub">Instagram · Visual intelligence daily</div>
           </div>
         </a>
-        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="social-tile st-blog">
-          <span class="st-icon">📰</span>
-          <div class="st-text">
-            <div class="st-handle">Daily Edition</div>
-            <div class="st-desc">Read today's full newsletter →</div>
+        <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="strip-item si-blog">
+          <span class="strip-icon">📰</span>
+          <div class="strip-text">
+            <div class="strip-handle">Daily Edition</div>
+            <div class="strip-sub">Read today's full newsletter →</div>
           </div>
         </a>
       </div>
+
     </div>
   </div>
 </section>
 
-</div><!-- .outer -->
+</div><!-- #page -->
 
-<!-- ═══ FOOTER ════════════════════════════════════════════ -->
+<!-- FOOTER -->
 <footer>
   <div class="foot-brand">
-    <div class="foot-mark">M</div>
+    <div class="foot-M">M</div>
     <div>
       <div class="foot-name">MBA India Daily</div>
       <div class="foot-sub">Business Intelligence</div>
     </div>
   </div>
-  <div class="foot-mid">
-    Understand the Economy. <em>Not Just the Headlines.</em>
-  </div>
-  <div class="foot-copy">
-    © 2026 MBA India Daily<br>
-    For MBA Aspirants · Students · Young Managers
-  </div>
+  <div class="foot-mid">Understand the Economy. <em>Not Just the Headlines.</em></div>
+  <div class="foot-copy">© 2026 MBA India Daily<br>For MBA Aspirants · Students · Young Managers</div>
 </footer>
 
-<!-- ═══ SCRIPTS ════════════════════════════════════════════ -->
+<!-- ═══ SCRIPTS ════════════════════════════════ -->
 <script>
-/* ── Particle canvas ────────────────────────────────── */
-(function(){
-  const c=document.getElementById('canvas-bg');
-  const ctx=c.getContext('2d');
-  let W,H,pts=[];
-  const COLS=['rgba(255,155,33,','rgba(45,253,197,','rgba(192,132,252,','rgba(251,191,36,','rgba(244,114,182,'];
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
-  function P(){this.reset();}
-  P.prototype.reset=function(){
-    this.x=Math.random()*W;this.y=Math.random()*H;
-    this.r=Math.random()*1.8+.4;
-    this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;
-    this.a=Math.random()*.4+.06;
-    this.col=COLS[Math.floor(Math.random()*COLS.length)];
-  };
-  P.prototype.tick=function(){
-    this.x+=this.vx;this.y+=this.vy;
-    if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();
-  };
-  P.prototype.draw=function(){
-    ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
-    ctx.fillStyle=this.col+this.a+')';ctx.fill();
-  };
-  function init(){resize();pts=[];const n=Math.min(160,Math.floor(W*H/10000));for(let i=0;i<n;i++)pts.push(new P());}
-  function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.tick();p.draw();});requestAnimationFrame(loop);}
-  window.addEventListener('resize',init);init();loop();
-})();
-
-/* ── Cursor glow ────────────────────────────────────── */
-(function(){
-  const g=document.getElementById('cursorGlow');
-  document.addEventListener('mousemove',e=>{g.style.left=e.clientX+'px';g.style.top=e.clientY+'px';});
-})();
-
-/* ── GSAP ───────────────────────────────────────────── */
 gsap.registerPlugin(ScrollTrigger);
 
-/* Hero init states */
-gsap.set('#heroKicker',{opacity:0,y:20});
-gsap.set('#heroH1',{opacity:0,y:60,skewY:3});
-gsap.set('#heroTagline',{opacity:0,y:30});
-gsap.set('#heroSub',{opacity:0,y:24});
-gsap.set('#heroCtas',{opacity:0,y:18});
+/* ── NAV dark on scroll ─────────────────── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('dark',window.scrollY>60);
+},{passive:true});
 
-/* Hero entrance */
-const htl=gsap.timeline({delay:.2});
-htl.to('#heroKicker',{opacity:1,y:0,duration:.65,ease:'power2.out'})
-   .to('#heroH1',{opacity:1,y:0,skewY:0,duration:1,ease:'power4.out'},'-=.3')
-   .to('#heroTagline',{opacity:1,y:0,duration:.7,ease:'power2.out'},'-=.5')
-   .to('#heroSub',{opacity:1,y:0,duration:.6,ease:'power2.out'},'-=.4')
-   .to('#heroCtas',{opacity:1,y:0,duration:.6,ease:'power2.out'},'-=.3');
+/* ── 3D SPIRAL CANVAS ───────────────────── */
+(function(){
+  const cv=document.getElementById('spiral-canvas');
+  const ctx=cv.getContext('2d');
+  let W,H,scrollY=0,raf;
 
-/* What section */
-gsap.from('.what-left',{
-  scrollTrigger:{trigger:'#what',start:'top 75%'},
-  x:-70,opacity:0,duration:1,ease:'power3.out'
+  function resize(){
+    W=cv.width=window.innerWidth;
+    H=cv.height=window.innerHeight;
+  }
+
+  /* project 3D → 2D */
+  function proj(x,y,z){
+    const fov=600;
+    const scale=fov/(fov+z);
+    return{x:x*scale+W/2, y:y*scale+H/2, s:scale};
+  }
+
+  /* draw one helix arm */
+  function drawArm(rotOffset,color,alpha){
+    const steps=220;
+    const R=Math.min(W,H)*0.38;
+    const depth=Math.min(W,H)*0.55;
+    const turns=3.5;
+
+    ctx.beginPath();
+    let first=true;
+    for(let i=0;i<steps;i++){
+      const t=i/steps;
+      const angle=(t*turns*Math.PI*2)+rotOffset;
+      const x=Math.cos(angle)*R;
+      const y=(t-0.5)*H*1.1;
+      const z=Math.sin(angle)*depth;
+      const p=proj(x,y,z);
+      if(first){ctx.moveTo(p.x,p.y);first=false;}
+      else ctx.lineTo(p.x,p.y);
+    }
+    ctx.strokeStyle=`rgba(${color},${(alpha*(0.3+0.2)).toFixed(2)})`;
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+
+  /* dot cloud on spiral */
+  function drawDots(rotOffset,color,alpha){
+    const steps=80;
+    const R=Math.min(W,H)*0.38;
+    const depth=Math.min(W,H)*0.55;
+    const turns=3.5;
+
+    for(let i=0;i<steps;i++){
+      const t=i/steps;
+      const angle=(t*turns*Math.PI*2)+rotOffset;
+      const x=Math.cos(angle)*R;
+      const y=(t-0.5)*H*1.1;
+      const z=Math.sin(angle)*depth;
+      const p=proj(x,y,z);
+
+      // only draw if on screen
+      if(p.x<-50||p.x>W+50||p.y<-50||p.y>H+50)continue;
+
+      const r=p.s*2.5;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${color},${(alpha*p.s*0.6).toFixed(2)})`;
+      ctx.fill();
+    }
+  }
+
+  function draw(progress){
+    ctx.clearRect(0,0,W,H);
+
+    const baseRot=progress*Math.PI*2;
+
+    // 3 spiral arms with different colors
+    drawArm(baseRot,        '237,255,0',  .7);  // yellow
+    drawArm(baseRot+2.094,  '255,59,63',  .5);  // coral
+    drawArm(baseRot+4.188,  '0,240,255',  .4);  // cyan
+
+    // dot accents
+    drawDots(baseRot,        '237,255,0',  .9);
+    drawDots(baseRot+2.094,  '255,59,63',  .7);
+    drawDots(baseRot+4.188,  '0,240,255',  .6);
+  }
+
+  function onScroll(){
+    scrollY=window.scrollY;
+    const maxScroll=document.body.scrollHeight-window.innerHeight;
+    const progress=maxScroll>0?scrollY/maxScroll:0;
+    draw(progress);
+  }
+
+  window.addEventListener('resize',()=>{resize();onScroll();},{passive:true});
+  window.addEventListener('scroll',onScroll,{passive:true});
+  resize();
+  draw(0);
+})();
+
+/* ── HERO ENTRANCE ──────────────────────── */
+(function(){
+  const tl=gsap.timeline({delay:.15});
+  tl.to('#hero-index',{opacity:1,x:0,duration:.7,ease:'power2.out'})
+    .to('.line-inner',{y:'0%',duration:1,stagger:.15,ease:'power4.out'},'-=.4')
+    .to('#hero-desc',{opacity:1,y:0,duration:.8,ease:'power2.out'},'-=.5')
+    .to('#hero-ctas',{opacity:1,y:0,duration:.7,ease:'power2.out'},'-=.5');
+})();
+
+/* ── HORIZONTAL SCROLL ──────────────────── */
+(function(){
+  const track=document.getElementById('htrack');
+  const panels=track.querySelectorAll('.hpanel');
+  const N=panels.length;
+  const wrap=document.getElementById('hscroll-wrap');
+  const totalW=(N-1)*100; // vw units
+
+  // set wrapper height to create scroll room
+  wrap.style.height=`calc(100vh + ${(N-1)*100}vh)`;
+
+  const st=ScrollTrigger.create({
+    trigger:wrap,
+    start:'top top',
+    end:`+=${(N-1)*window.innerHeight}`,
+    pin:'#hscroll-pin',
+    scrub:1,
+    onUpdate:self=>{
+      const x=self.progress*(N-1)*100;
+      gsap.set(track,{x:`-${x}vw`});
+      // update dots
+      const active=Math.round(self.progress*(N-1));
+      document.querySelectorAll('.hp-dot').forEach((d,i)=>{
+        d.classList.toggle('active',i===active);
+      });
+    }
+  });
+
+  // update on resize
+  window.addEventListener('resize',()=>{
+    wrap.style.height=`calc(100vh + ${(N-1)*window.innerHeight}px)`;
+    ScrollTrigger.refresh();
+  });
+})();
+
+/* ── TEXT REVEAL helper ─────────────────── */
+function revealText(el,trigger){
+  const words=el.querySelectorAll('.word-inner');
+  if(words.length===0) return;
+  gsap.to(words,{
+    y:'0%',duration:.8,stagger:.04,ease:'power4.out',
+    scrollTrigger:{trigger:trigger||el,start:'top 80%'}
+  });
+}
+
+/* ── WORD SPLIT helper ──────────────────── */
+function splitWords(el){
+  el.innerHTML=el.innerHTML.replace(/(<[^>]+>|[^<]+)/g,function(m){
+    if(m.startsWith('<'))return m;
+    return m.split(' ').map(w=>
+      w?`<span class="word"><span class="word-inner">${w}</span></span> `:' '
+    ).join('');
+  });
+}
+
+/* ── PILLAR CARDS reveal ────────────────── */
+gsap.to('.pc',{
+  scrollTrigger:{trigger:'#pillars-grid',start:'top 80%'},
+  opacity:1,y:0,duration:.6,stagger:.06,ease:'power3.out'
 });
-gsap.from('#statBlock',{
-  scrollTrigger:{trigger:'#what',start:'top 70%'},
-  x:70,opacity:0,duration:1,ease:'power3.out',delay:.1
+
+/* ── AUDIENCE rows reveal ───────────────── */
+gsap.to('.aud-row',{
+  scrollTrigger:{trigger:'#aud-wrap',start:'top 80%'},
+  opacity:1,x:0,duration:.9,stagger:.18,ease:'power3.out'
 });
 
-/* Pillar cards */
-gsap.to('.pillar-card',{
-  scrollTrigger:{trigger:'#pillarsGrid',start:'top 82%'},
-  opacity:1,y:0,rotateX:0,
-  duration:.65,stagger:.07,ease:'power3.out'
-});
+/* ── WHY CARDS reveal ───────────────────── */
+(function(){
+  const cards=document.querySelectorAll('.why-card');
+  cards.forEach((c,i)=>{
+    gsap.to(c,{
+      scrollTrigger:{trigger:c,start:'top 85%'},
+      opacity:1,duration:.7,ease:'power2.out',delay:i*.08
+    });
+    gsap.from(c,{
+      scrollTrigger:{trigger:c,start:'top 85%'},
+      y:40,duration:.7,ease:'power3.out',delay:i*.08
+    });
+  });
+})();
 
-/* Audience */
-gsap.to('.audience-card',{
-  scrollTrigger:{trigger:'#audienceGrid',start:'top 80%'},
-  opacity:1,rotateY:0,
-  duration:.9,stagger:.15,ease:'power3.out'
-});
-
-/* Why */
-gsap.to('.why-card',{
-  scrollTrigger:{trigger:'#whyGrid',start:'top 82%'},
+/* ── CTA reveal ─────────────────────────── */
+gsap.to(['#cta-over','#cta-h2','#cta-it','#cta-sub','#cta-btns','#cta-strip'],{
+  scrollTrigger:{trigger:'#cta',start:'top 75%'},
   opacity:1,y:0,duration:.7,stagger:.1,ease:'power3.out'
 });
 
-/* CTA */
-gsap.set(['#ctaEyebrow','#ctaH2','#ctaTagline','#ctaSub','#ctaBtns','#socialStrip'],{opacity:0,y:40});
-gsap.to(['#ctaEyebrow','#ctaH2','#ctaTagline','#ctaSub','#ctaBtns','#socialStrip'],{
-  scrollTrigger:{trigger:'#cta',start:'top 75%'},
-  opacity:1,y:0,duration:.75,stagger:.1,ease:'power3.out'
+/* ── Pillar card 3D tilt ────────────────── */
+document.querySelectorAll('.pc').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
+    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
+    c.style.transform=`perspective(600px) rotateY(${dx*8}deg) rotateX(${-dy*8}deg) translateZ(6px)`;
+    c.style.transition='transform .08s linear';
+  });
+  c.addEventListener('mouseleave',()=>{
+    c.style.transform='';
+    c.style.transition='transform .5s cubic-bezier(.22,.68,0,1.2)';
+  });
 });
 
-/* Horizontal text parallax */
+/* ── Section label reveal ───────────────── */
+document.querySelectorAll('.s-label').forEach(el=>{
+  gsap.from(el,{
+    scrollTrigger:{trigger:el,start:'top 85%'},
+    opacity:0,x:-20,duration:.6,ease:'power2.out'
+  });
+});
+
+/* ── Big heading char reveal ────────────── */
+['#pillars-h2','#why-h2'].forEach(sel=>{
+  const el=document.querySelector(sel);
+  if(!el)return;
+  gsap.from(el,{
+    scrollTrigger:{trigger:el,start:'top 80%'},
+    opacity:0,y:40,duration:.8,ease:'power3.out'
+  });
+});
+
+/* ── stat-like number counter on audience ── */
 ScrollTrigger.create({
-  trigger:'#horizBanner',start:'top bottom',end:'bottom top',
-  onUpdate:s=>{
-    document.getElementById('horizInner').style.transform=`translateX(${-s.progress*320}px)`;
+  trigger:'#for-whom',start:'top 70%',once:true,
+  onEnter:()=>{
+    document.querySelectorAll('.aud-idx').forEach((el,i)=>{
+      gsap.from(el,{
+        textContent:0,duration:1.2,delay:i*.2,ease:'power2.out',
+        snap:{textContent:1},
+        onUpdate:function(){el.textContent=String(Math.round(this.targets()[0]._gsap.textContent||0)).padStart(2,'0');}
+      });
+    });
   }
 });
 
-/* 3D tilt on pillar cards */
-document.querySelectorAll('[data-tilt]').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    card.style.transform=`perspective(700px) rotateY(${dx*10}deg) rotateX(${-dy*10}deg) translateZ(8px)`;
-    card.style.transition='transform .08s linear';
-  });
-  card.addEventListener('mouseleave',()=>{
-    card.style.transform='perspective(700px) rotateY(0) rotateX(0) translateZ(0)';
-    card.style.transition='transform .5s cubic-bezier(.22,.68,0,1.2)';
-  });
-});
-
-/* 3D tilt audience */
-document.querySelectorAll('.audience-card').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    card.style.transform=`perspective(900px) rotateY(${dx*7}deg) rotateX(${-dy*5}deg) translateZ(5px)`;
-    card.style.transition='transform .08s linear';
-  });
-  card.addEventListener('mouseleave',()=>{
-    card.style.transform='';
-    card.style.transition='transform .5s ease';
-  });
-});
-
-/* Stat block tilt */
-(function(){
-  const el=document.getElementById('statBlock');
-  if(!el)return;
-  el.addEventListener('mousemove',e=>{
-    const r=el.getBoundingClientRect();
-    const dx=(e.clientX-(r.left+r.width/2))/(r.width/2);
-    const dy=(e.clientY-(r.top+r.height/2))/(r.height/2);
-    el.style.transform=`perspective(1000px) rotateY(${dx*7}deg) rotateX(${-dy*7}deg)`;
-    el.style.transition='transform .08s linear';
-  });
-  el.addEventListener('mouseleave',()=>{
-    el.style.transform='';
-    el.style.transition='transform .6s ease';
-  });
-})();
-
-/* Hero parallax */
-(function(){
-  const r1=document.querySelector('.hero-ring-1');
-  const r2=document.querySelector('.hero-ring-2');
-  window.addEventListener('scroll',()=>{
-    const y=window.scrollY;
-    if(r1)r1.style.transform=`translate(-50%,-50%) scale(${1+y*.0003})`;
-    if(r2)r2.style.transform=`translate(-50%,-50%) scale(${1+y*.0001}) rotate(${y*.02}deg)`;
-  },{passive:true});
-})();
-
-/* Why card hover lift */
-document.querySelectorAll('.why-card').forEach(card=>{
-  card.addEventListener('mouseenter',()=>{
-    gsap.to(card,{y:-6,duration:.3,ease:'power2.out'});
-  });
-  card.addEventListener('mouseleave',()=>{
-    gsap.to(card,{y:0,duration:.4,ease:'power2.inOut'});
-  });
+/* ── Smooth hover on CTA strip ──────────── */
+document.querySelectorAll('.strip-item').forEach(el=>{
+  el.addEventListener('mouseenter',()=>gsap.to(el,{y:-5,duration:.3,ease:'power2.out'}));
+  el.addEventListener('mouseleave',()=>gsap.to(el,{y:0,duration:.4,ease:'power2.inOut'}));
 });
 </script>
 </body>

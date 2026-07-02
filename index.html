@@ -5,31 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBA India Daily — Understand the Economy. Not Just the Headlines.</title>
 <meta name="description" content="India's sharpest daily business intelligence newsletter for MBA aspirants, students and future managers.">
-<meta name="theme-color" content="#F7F5EF">
+<meta name="theme-color" content="#B4231F">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Serif+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <style>
-/* ── TOKENS — broadsheet newspaper palette ── */
+/* ── TOKENS — oxblood broadsheet, inverted ── */
 :root{
-  --color-paper:        #F7F5EF; /* page background — cream newsprint */
-  --color-paper-raised: #EDEAE0; /* cards, section bands, subtle elevation */
-  --color-ink:          #171614; /* primary text, headlines */
-  --color-ink-muted:    #6B675E; /* secondary text, captions, eyebrows */
-  --color-accent:       #B4231F; /* oxblood — CTAs, accent words, hovers, focus ONLY */
-  --color-accent-hover: #921C19; /* darker oxblood for hover/pressed */
-  --color-line:         #D8D4C8; /* hairline borders, dividers, rules */
+  --color-paper:        #B4231F; /* page background — oxblood */
+  --color-paper-raised: #A61F1C; /* cards, section bands, deeper oxblood */
+  --color-ink:          #F7F5EF; /* primary text, headlines — cream */
+  --color-ink-muted:    #EDD6D0; /* secondary text, captions, eyebrows */
+  --color-accent:       #000000; /* black — CTAs, display accent words, hovers ONLY */
+  --color-accent-hover: #33302C; /* charcoal for hover/pressed */
+  --color-line:         #C96662; /* hairline borders, dividers, rules */
 
-  /* semantic pair — STRICTLY for market/data indicators in content, never UI */
+  /* semantic pair — STRICTLY for market/data indicators in content, never UI
+     (unusable on the red page bg — pair only inside future light data cards) */
   --color-up:   #1D7A46;
   --color-down: #B4231F;
 
-  /* derived alphas (single source: ink 23,22,20 / paper 247,245,239 / accent 180,35,31) */
-  --ink-rgb:    23,22,20;
-  --paper-rgb:  247,245,239;
-  --accent-rgb: 180,35,31;
+  /* derived alphas (single source: ink 247,245,239 / paper 180,35,31 / accent 0,0,0) */
+  --ink-rgb:    247,245,239;
+  --paper-rgb:  180,35,31;
+  --accent-rgb: 0,0,0;
 
   --syne:  'Syne', sans-serif;
   --serif: 'DM Serif Display', serif;
@@ -111,12 +112,12 @@ a{color:inherit;text-decoration:none;}
   color:var(--color-ink-muted);background:transparent;cursor:pointer;
   transition:.2s;
 }
-.nl:hover{border-color:var(--color-accent);color:var(--color-accent);}
+.nl:hover{border-color:var(--color-ink);color:var(--color-ink);}
 .nl-cta{
-  background:var(--color-accent);color:var(--color-paper);
+  background:var(--color-accent);color:var(--color-ink);
   border-color:var(--color-accent);
 }
-.nl-cta:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover);transform:translateY(-2px);box-shadow:0 1px 3px rgba(var(--ink-rgb),.08);}
+.nl-cta:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover);transform:translateY(-2px);box-shadow:0 1px 3px rgba(var(--accent-rgb),.25);}
 @media(max-width:640px){
   #nav{padding:0 20px;}
   .nav-links .nl:not(.nl-cta){display:none;}
@@ -146,10 +147,10 @@ a{color:inherit;text-decoration:none;}
   font-family:var(--mono);font-size:11px;font-weight:700;
   letter-spacing:.6px;text-transform:uppercase;
   padding:10px 20px;border:1.5px solid var(--color-accent);
-  background:var(--color-accent);color:var(--color-paper);cursor:pointer;
+  background:var(--color-accent);color:var(--color-ink);cursor:pointer;
   transition:transform .2s ease,box-shadow .2s ease;
 }
-.sticky-subscribe-btn:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover);transform:translateY(-2px);box-shadow:0 1px 3px rgba(var(--ink-rgb),.08);}
+.sticky-subscribe-btn:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover);transform:translateY(-2px);box-shadow:0 1px 3px rgba(var(--accent-rgb),.25);}
 @media(max-width:480px){
   .sticky-subscribe-inner{justify-content:center;text-align:center;}
   .sticky-subscribe-text{display:none;}
@@ -204,7 +205,7 @@ a{color:inherit;text-decoration:none;}
 .hero-h1 .line-inner{display:block;transform:translateY(110%);}
 
 .h1-yellow{color:var(--color-ink);}
-.h1-outline{-webkit-text-stroke:2px rgba(var(--ink-rgb),.5);color:transparent;}
+.h1-outline{-webkit-text-stroke:2px rgba(var(--ink-rgb),.65);color:transparent;}
 .h1-coral{color:var(--color-accent);}
 
 .hero-bottom{
@@ -218,7 +219,7 @@ a{color:inherit;text-decoration:none;}
   max-width:520px;line-height:1.6;
   opacity:0;transform:translateY(16px);
 }
-.hero-desc em{color:var(--color-accent);font-style:normal;}
+.hero-desc em{color:var(--color-ink);font-style:normal;}
 
 /* ── HERO SIGNUP (primary CTA) ──────────── */
 .hero-signup{
@@ -262,20 +263,20 @@ a{color:inherit;text-decoration:none;}
   font-family:var(--mono);font-size:11px;font-weight:700;
   letter-spacing:.6px;text-transform:uppercase;
   padding:16px 22px;border:none;
-  background:var(--color-accent);color:var(--color-paper);
+  background:var(--color-accent);color:var(--color-ink);
   cursor:pointer;
   transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
 }
 .signup-btn:hover:not(:disabled){
   background:var(--color-accent-hover);
   transform:translateY(-3px);
-  box-shadow:0 1px 3px rgba(var(--ink-rgb),.08);
+  box-shadow:0 1px 3px rgba(var(--accent-rgb),.25);
 }
 .signup-btn:active:not(:disabled){transform:translateY(-1px) scale(.98);}
 .signup-btn:disabled{cursor:default;opacity:.85;}
 .signup-btn .signup-spinner{
   display:none;width:13px;height:13px;flex-shrink:0;
-  border:2px solid rgba(var(--paper-rgb),.35);border-top-color:var(--color-paper);
+  border:2px solid rgba(var(--ink-rgb),.35);border-top-color:var(--color-ink);
   border-radius:50%;
   animation:signup-spin .6s linear infinite;
 }
@@ -303,9 +304,9 @@ a{color:inherit;text-decoration:none;}
   letter-spacing:.6px;text-transform:uppercase;
   color:var(--color-ink-muted);transition:color .2s ease;
 }
-.secondary-link:hover{color:var(--color-accent);}
+.secondary-link:hover{color:var(--color-ink);}
 .signup-error{
-  font-family:var(--mono);font-size:10.5px;color:var(--color-accent);
+  font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--color-ink);
   margin-top:10px;min-height:14px;
 }
 
@@ -364,8 +365,8 @@ a{color:inherit;text-decoration:none;}
   cursor:pointer;transition:transform .25s,box-shadow .25s;
 }
 .btn:hover{transform:translateY(-3px);}
-.btn-y{background:var(--color-accent);color:var(--color-paper);border-color:var(--color-accent);}
-.btn-y:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover);box-shadow:0 1px 3px rgba(var(--ink-rgb),.08);}
+.btn-y{background:var(--color-accent);color:var(--color-ink);border-color:var(--color-accent);}
+.btn-y:hover{background:var(--color-accent-hover);border-color:var(--color-accent-hover);box-shadow:0 1px 3px rgba(var(--accent-rgb),.25);}
 .btn-c{background:transparent;color:var(--color-ink);border-color:var(--color-ink);}
 .btn-c:hover{color:var(--color-accent);border-color:var(--color-accent);}
 .btn-cv{background:transparent;color:var(--color-ink);border-color:var(--color-ink);}
@@ -386,7 +387,7 @@ a{color:inherit;text-decoration:none;}
   letter-spacing:2px;text-transform:uppercase;
   padding:0 28px;white-space:nowrap;color:var(--color-paper);
 }
-.mq-sep{color:rgba(var(--paper-rgb),.45);padding:0 4px;}
+.mq-sep{color:rgba(var(--paper-rgb),.6);padding:0 4px;}
 
 /* ── SECTION BASE ───────────────────────── */
 section{position:relative;z-index:2;}
@@ -453,7 +454,7 @@ section{position:relative;z-index:2;}
 .hpanel-h2 em{color:var(--color-accent);font-style:normal;}
 
 .hpanel-outline{
-  -webkit-text-stroke:2px rgba(var(--ink-rgb),.5);
+  -webkit-text-stroke:2px rgba(var(--ink-rgb),.65);
   color:transparent;
 }
 .hpanel-body{
@@ -509,7 +510,7 @@ section{position:relative;z-index:2;}
   line-height:.9;letter-spacing:-3px;
   text-transform:uppercase;
 }
-.sec-big-h2 .outline{-webkit-text-stroke:2px rgba(var(--ink-rgb),.5);color:transparent;}
+.sec-big-h2 .outline{-webkit-text-stroke:2px rgba(var(--ink-rgb),.65);color:transparent;}
 .sec-big-h2 .yellow{color:var(--color-ink);}
 .sec-big-h2 .coral{color:var(--color-accent);}
 .sec-big-h2 .cyan{color:var(--color-accent);}
@@ -519,7 +520,7 @@ section{position:relative;z-index:2;}
   font-size:18px;color:var(--color-ink-muted);
   line-height:1.8;
 }
-.sec-right-desc em{color:var(--color-accent);font-style:normal;}
+.sec-right-desc em{color:var(--color-ink);font-style:normal;}
 
 .pillars-grid{
   display:grid;grid-template-columns:repeat(3,1fr);
@@ -674,7 +675,7 @@ section{position:relative;z-index:2;}
   opacity:0;transform:translateY(40px);
 }
 .cta-h2 .y{color:var(--color-ink);}
-.cta-h2 .o{-webkit-text-stroke:2px rgba(var(--ink-rgb),.5);color:transparent;}
+.cta-h2 .o{-webkit-text-stroke:2px rgba(var(--ink-rgb),.65);color:transparent;}
 .cta-h2 .c{color:var(--color-accent);}
 
 .cta-italic{
@@ -684,7 +685,7 @@ section{position:relative;z-index:2;}
   margin-bottom:16px;display:block;
   opacity:0;transform:translateY(20px);
 }
-.cta-italic em{color:var(--color-accent);font-style:normal;}
+.cta-italic em{color:var(--color-ink);font-style:normal;}
 
 .cta-sub{
   font-size:16px;color:var(--color-ink-muted);
@@ -750,16 +751,16 @@ footer .logo-mark-letter{color:var(--color-paper);}
 }
 .foot-sub{
   font-family:var(--mono);font-size:8px;letter-spacing:2px;
-  text-transform:uppercase;color:rgba(var(--paper-rgb),.6);margin-top:3px;
+  text-transform:uppercase;color:rgba(var(--paper-rgb),.85);margin-top:3px;
 }
 .foot-mid{
   font-family:var(--serif);font-style:italic;
-  font-size:16px;color:rgba(var(--paper-rgb),.6);
+  font-size:16px;color:rgba(var(--paper-rgb),.85);
 }
 .foot-mid em{color:var(--color-paper);font-style:normal;}
 .foot-copy{
   font-family:var(--mono);font-size:9px;letter-spacing:.5px;
-  color:rgba(var(--paper-rgb),.55);text-align:right;
+  color:rgba(var(--paper-rgb),.85);text-align:right;
 }
 </style>
 </head>
@@ -888,14 +889,14 @@ footer .logo-mark-letter{color:var(--color-paper);}
   </div>
   <div class="marquee" style="border-top:none;">
     <div class="marquee-row rev">
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Understand the Economy</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Not Just the Headlines</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Think Like a Manager</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Every Morning</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Understand the Economy</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Not Just the Headlines</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Think Like a Manager</span><span class="mq-sep">·</span>
-      <span class="mq-item" style="color:rgba(var(--paper-rgb),.55);">Every Morning</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Understand the Economy</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Not Just the Headlines</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Think Like a Manager</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Every Morning</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Understand the Economy</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Not Just the Headlines</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Think Like a Manager</span><span class="mq-sep">·</span>
+      <span class="mq-item" style="color:rgba(var(--paper-rgb),.85);">Every Morning</span><span class="mq-sep">·</span>
     </div>
   </div>
 </div>
@@ -1254,14 +1255,14 @@ window.addEventListener('scroll',()=>{
     const baseRot=progress*Math.PI*2;
 
     // 3 spiral arms with different colors
-    drawArm(baseRot,        '23,22,20',   .30); // ink
-    drawArm(baseRot+2.094,  '23,22,20',   .22); // ink
-    drawArm(baseRot+4.188,  '107,103,94', .20); // ink-muted
+    drawArm(baseRot,        '247,245,239', .30); // ink (cream)
+    drawArm(baseRot+2.094,  '247,245,239', .22); // ink (cream)
+    drawArm(baseRot+4.188,  '237,214,208', .20); // ink-muted
 
     // dot accents
-    drawDots(baseRot,        '23,22,20',   .40);
-    drawDots(baseRot+2.094,  '23,22,20',   .32);
-    drawDots(baseRot+4.188,  '107,103,94', .28);
+    drawDots(baseRot,        '247,245,239', .40);
+    drawDots(baseRot+2.094,  '247,245,239', .32);
+    drawDots(baseRot+4.188,  '237,214,208', .28);
   }
 
   function onScroll(){

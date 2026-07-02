@@ -120,6 +120,43 @@ a{color:inherit;text-decoration:none;}
   .nav-links .nl:not(.nl-cta){display:none;}
 }
 
+/* ── STICKY SUBSCRIBE BAR ───────────────── */
+#sticky-subscribe{
+  position:fixed;left:0;right:0;bottom:0;z-index:250;
+  background:rgba(8,8,8,.94);backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  padding:14px 24px;
+  opacity:0;transform:translateY(100%);
+  transition:opacity .4s ease,transform .4s ease;
+  pointer-events:none;
+}
+#sticky-subscribe.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+.sticky-subscribe-inner{
+  max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;
+}
+.sticky-subscribe-text{
+  font-family:var(--mono);font-size:11px;letter-spacing:.3px;
+  color:rgba(255,255,255,.55);
+}
+.sticky-subscribe-btn{
+  flex-shrink:0;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.6px;text-transform:uppercase;
+  padding:10px 20px;border:1.5px solid var(--yellow);
+  background:var(--yellow);color:var(--bg);cursor:pointer;
+  transition:transform .2s ease,box-shadow .2s ease;
+}
+.sticky-subscribe-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(237,255,0,.35);}
+@media(max-width:480px){
+  .sticky-subscribe-inner{justify-content:center;text-align:center;}
+  .sticky-subscribe-text{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  #sticky-subscribe{transition:opacity .2s linear;}
+  .sticky-subscribe-btn:hover{transform:none;}
+}
+
 /* ── HERO ───────────────────────────────── */
 #hero{
   min-height:100vh;
@@ -142,9 +179,9 @@ a{color:inherit;text-decoration:none;}
 .hero-index{
   font-family:var(--mono);font-size:10px;letter-spacing:3px;
   text-transform:uppercase;color:var(--yellow);
-  margin-bottom:32px;
+  margin-bottom:28px;
   display:flex;align-items:center;gap:12px;
-  opacity:0;transform:translateX(-20px);
+  opacity:0;transform:translateY(16px);
 }
 .hero-index-dot{
   width:6px;height:6px;border-radius:50%;
@@ -155,10 +192,10 @@ a{color:inherit;text-decoration:none;}
 
 .hero-h1{
   font-family:var(--syne);font-weight:800;
-  font-size:clamp(44px,8vw,104px);
+  font-size:clamp(40px,7vw,96px);
   line-height:.92;letter-spacing:-3px;
   text-transform:uppercase;
-  margin-bottom:40px;
+  margin-bottom:28px;
   width:100%;
 }
 .hero-h1 .line{display:block;overflow:hidden;}
@@ -169,20 +206,150 @@ a{color:inherit;text-decoration:none;}
 .h1-coral{color:var(--coral);}
 
 .hero-bottom{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  width:100%;flex-wrap:wrap;gap:32px;
+  display:flex;flex-direction:column;align-items:flex-start;
+  width:100%;gap:20px;
 }
 .hero-desc{
   font-family:var(--serif);font-style:italic;
-  font-size:clamp(16px,2vw,22px);
+  font-size:clamp(15px,1.6vw,19px);
   color:rgba(255,255,255,.5);
-  max-width:480px;line-height:1.7;
-  opacity:0;transform:translateY(20px);
+  max-width:520px;line-height:1.6;
+  opacity:0;transform:translateY(16px);
 }
 .hero-desc em{color:var(--yellow);font-style:normal;}
-.hero-ctas{
-  display:flex;gap:12px;flex-wrap:wrap;
-  opacity:0;transform:translateY(20px);
+
+/* ── HERO SIGNUP (primary CTA) ──────────── */
+.hero-signup{
+  width:100%;max-width:560px;
+  opacity:0;transform:translateY(16px);
+}
+.visually-hidden{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+.signup-field{
+  display:flex;width:100%;
+  border:1.5px solid var(--border);
+  background:rgba(255,255,255,.02);
+  transition:border-color .25s ease,box-shadow .25s ease;
+}
+.signup-field:focus-within{
+  border-color:var(--yellow);
+  box-shadow:0 0 0 3px rgba(237,255,0,.1),0 0 28px rgba(237,255,0,.14);
+}
+.signup-field.error{border-color:var(--coral);}
+.signup-field.error:focus-within{
+  box-shadow:0 0 0 3px rgba(255,59,63,.12),0 0 28px rgba(255,59,63,.16);
+}
+.signup-field.shake{animation:signup-shake .5s cubic-bezier(.36,.07,.19,.97);}
+@keyframes signup-shake{
+  10%,90%{transform:translateX(-1px);}
+  20%,80%{transform:translateX(2px);}
+  30%,50%,70%{transform:translateX(-4px);}
+  40%,60%{transform:translateX(4px);}
+}
+.signup-input{
+  flex:1;min-width:0;background:transparent;border:none;outline:none;
+  padding:16px 18px;
+  font-family:var(--mono);font-size:13px;color:var(--ink);
+}
+.signup-input::placeholder{color:var(--muted);}
+.signup-btn{
+  flex-shrink:0;position:relative;
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.6px;text-transform:uppercase;
+  padding:16px 22px;border:none;
+  background:var(--yellow);color:var(--bg);
+  cursor:pointer;
+  transition:transform .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.signup-btn:hover:not(:disabled){
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(237,255,0,.35);
+}
+.signup-btn:active:not(:disabled){transform:translateY(-1px) scale(.98);}
+.signup-btn:disabled{cursor:default;opacity:.85;}
+.signup-btn .signup-spinner{
+  display:none;width:13px;height:13px;flex-shrink:0;
+  border:2px solid rgba(8,8,8,.28);border-top-color:var(--bg);
+  border-radius:50%;
+  animation:signup-spin .6s linear infinite;
+}
+.signup-btn.loading .signup-spinner{display:inline-block;}
+.signup-btn.loading .signup-btn-text,
+.signup-btn.loading .signup-btn-arrow{opacity:.45;}
+@keyframes signup-spin{to{transform:rotate(360deg);}}
+
+@media(max-width:640px){
+  .signup-field{flex-direction:column;}
+  .signup-btn{justify-content:center;padding:15px 18px;}
+}
+
+.signup-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px 20px;margin-top:14px;
+}
+.signup-micro{
+  font-family:var(--mono);font-size:10px;letter-spacing:.3px;
+  color:var(--muted);line-height:1.6;
+}
+.secondary-link{
+  display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
+  font-family:var(--mono);font-size:10.5px;font-weight:700;
+  letter-spacing:.6px;text-transform:uppercase;
+  color:var(--muted);transition:color .2s ease;
+}
+.secondary-link:hover{color:var(--yellow);}
+.signup-error{
+  font-family:var(--mono);font-size:10.5px;color:var(--coral);
+  margin-top:10px;min-height:14px;
+}
+
+/* success state */
+.signup-success[hidden]{display:none;}
+.signup-success{
+  display:flex;align-items:center;gap:16px;padding:6px 0;
+}
+.success-check-circle{
+  stroke:var(--yellow);stroke-width:2;fill:none;
+  stroke-dasharray:146;stroke-dashoffset:146;
+  animation:success-draw-circle .5s ease-out forwards;
+}
+.success-check-mark{
+  stroke:var(--yellow);stroke-width:3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:34;stroke-dashoffset:34;
+  animation:success-draw-mark .35s ease-out .45s forwards;
+}
+@keyframes success-draw-circle{to{stroke-dashoffset:0;}}
+@keyframes success-draw-mark{to{stroke-dashoffset:0;}}
+.success-text{
+  font-family:var(--serif);font-style:italic;
+  font-size:clamp(15px,1.8vw,19px);color:var(--ink);
+  opacity:0;transform:translateY(8px);
+  animation:success-fade-up .4s ease-out .55s forwards;
+}
+@keyframes success-fade-up{to{opacity:1;transform:translateY(0);}}
+
+/* scroll cue */
+.scroll-cue{
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);
+  pointer-events:none;
+}
+.scroll-cue-chevron{animation:scroll-cue-bounce 1.8s ease-in-out infinite;}
+@keyframes scroll-cue-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+@media(prefers-reduced-motion:reduce){
+  .signup-field.shake{animation:none;}
+  .signup-spinner{animation:none;}
+  .success-check-circle,.success-check-mark{animation:none;stroke-dashoffset:0;}
+  .success-text{animation:none;opacity:1;transform:none;}
+  .signup-btn:hover:not(:disabled){transform:none;}
+  .scroll-cue-chevron{animation:none;}
 }
 
 /* ── BUTTONS ────────────────────────────── */
@@ -650,6 +817,16 @@ footer{
   </div>
 </nav>
 
+<!-- STICKY SUBSCRIBE BAR — appears after scrolling past hero -->
+<div id="sticky-subscribe">
+  <div class="sticky-subscribe-inner">
+    <span class="sticky-subscribe-text">Get India's sharpest MBA newsletter, free.</span>
+    <button type="button" class="sticky-subscribe-btn" id="sticky-subscribe-btn" tabindex="-1">
+      Subscribe <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</div>
+
 <div id="page">
 
 <!-- ═══ HERO ═══════════════════════════════ -->
@@ -674,12 +851,47 @@ footer{
       Every morning, we turn India's complex economy into your<br>
       <em>sharpest competitive advantage.</em>
     </p>
-    <div class="hero-ctas" id="hero-ctas">
-      <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="btn btn-y">
-        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
-        Read Today
-      </a>
+
+    <div class="hero-signup" id="hero-signup">
+      <form id="signup-form" class="signup-form" novalidate>
+        <label for="signup-email" class="visually-hidden">Email address</label>
+        <div class="signup-field" id="signup-field">
+          <input
+            type="email" id="signup-email" name="email" class="signup-input"
+            placeholder="your.email@gmail.com" autocomplete="email" required
+            aria-describedby="signup-error">
+          <button type="submit" class="signup-btn" id="signup-btn">
+            <span class="signup-btn-text">Get the Daily Edition</span>
+            <span class="signup-btn-arrow" aria-hidden="true">→</span>
+            <span class="signup-spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="signup-meta">
+          <p class="signup-micro">Free forever · 15 minutes every morning · Join future managers across India</p>
+          <a href="https://mbaindiadailyblog.vercel.app/" target="_blank" rel="noopener" class="secondary-link">
+            Read Today's Edition <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <p class="signup-error" id="signup-error" aria-live="polite"></p>
+      </form>
+
+      <div class="signup-success" id="signup-success" aria-live="polite" hidden>
+        <svg class="success-check" viewBox="0 0 52 52" width="40" height="40" aria-hidden="true">
+          <circle class="success-check-circle" cx="26" cy="26" r="23"/>
+          <path class="success-check-mark" d="M14 27l7 7 16-16"/>
+        </svg>
+        <p class="success-text">You're in. First edition lands tomorrow morning. 🇮🇳</p>
+      </div>
     </div>
+  </div>
+
+  <div class="scroll-cue" aria-hidden="true">
+    <span>Scroll</span>
+    <svg class="scroll-cue-chevron" width="12" height="7" viewBox="0 0 12 7" fill="none">
+      <path d="M1 1l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </div>
 </section>
 
@@ -993,6 +1205,9 @@ footer{
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
+/* ── reduced-motion flag (used across hero/form/nav scripts) ── */
+const prefersReducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ── NAV dark on scroll ─────────────────── */
 window.addEventListener('scroll',()=>{
   document.getElementById('nav').classList.toggle('dark',window.scrollY>60);
@@ -1095,13 +1310,128 @@ window.addEventListener('scroll',()=>{
   draw(0);
 })();
 
-/* ── HERO ENTRANCE ──────────────────────── */
+/* ── HERO ENTRANCE ──────────────────────────────────────────
+   Staggered reveal: eyebrow → headline → subtext → signup form.
+   Each step ~400ms, ~100ms apart, translateY(16px)→0 + opacity.
+   The headline keeps its existing clip-reveal (power4, per-line
+   stagger) as its own beat inside the same sequence. ──────── */
 (function(){
+  if(prefersReducedMotion){
+    gsap.set(['#hero-index','.line-inner','#hero-desc','#hero-signup'],{opacity:1,y:0});
+    return;
+  }
   const tl=gsap.timeline({delay:.15});
-  tl.to('#hero-index',{opacity:1,x:0,duration:.7,ease:'power2.out'})
-    .to('.line-inner',{y:'0%',duration:1,stagger:.15,ease:'power4.out'},'-=.4')
-    .to('#hero-desc',{opacity:1,y:0,duration:.8,ease:'power2.out'},'-=.5')
-    .to('#hero-ctas',{opacity:1,y:0,duration:.7,ease:'power2.out'},'-=.5');
+  tl.to('#hero-index',{opacity:1,y:0,duration:.4,ease:'power2.out'},0)
+    .to('.line-inner',{y:'0%',duration:.4,stagger:.08,ease:'power2.out'},.1)
+    .to('#hero-desc',{opacity:1,y:0,duration:.4,ease:'power2.out'},.3)
+    .to('#hero-signup',{opacity:1,y:0,duration:.4,ease:'power2.out'},.4);
+})();
+
+/* ── EMAIL SIGNUP FORM ────────────────────
+   Isolated, provider-agnostic submit handler — swap the TODO
+   block below for a real Beehiiv / Kit / Buttondown API call. */
+(function(){
+  const form=document.getElementById('signup-form');
+  const field=document.getElementById('signup-field');
+  const input=document.getElementById('signup-email');
+  const btn=document.getElementById('signup-btn');
+  const errorEl=document.getElementById('signup-error');
+  const successEl=document.getElementById('signup-success');
+  if(!form)return;
+
+  const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setError(msg){
+    errorEl.textContent=msg;
+    field.classList.add('error');
+    input.setAttribute('aria-invalid','true');
+    if(!prefersReducedMotion){
+      field.classList.remove('shake');
+      void field.offsetWidth; /* restart the shake keyframe */
+      field.classList.add('shake');
+    }
+  }
+  function clearError(){
+    errorEl.textContent='';
+    field.classList.remove('error');
+    input.removeAttribute('aria-invalid');
+  }
+  input.addEventListener('input',clearError);
+
+  async function submitEmail(email){
+    // TODO: replace this simulated delay with your email provider's
+    // subscribe call, e.g. for Beehiiv:
+    //   const res = await fetch(
+    //     `https://api.beehiiv.com/v2/publications/${PUB_ID}/subscriptions`,
+    //     {
+    //       method:'POST',
+    //       headers:{
+    //         'Content-Type':'application/json',
+    //         'Authorization':`Bearer ${API_KEY}`
+    //       },
+    //       body:JSON.stringify({email})
+    //     }
+    //   );
+    //   if(!res.ok) throw new Error('Subscription failed');
+    //   return res.json();
+    await new Promise(resolve=>setTimeout(resolve,800));
+    return{ok:true};
+  }
+
+  form.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const email=input.value.trim();
+    if(!EMAIL_RE.test(email)){
+      setError('Enter a valid email address.');
+      input.focus();
+      return;
+    }
+    clearError();
+    btn.classList.add('loading');
+    btn.disabled=true;
+    input.disabled=true;
+
+    try{
+      await submitEmail(email);
+      form.hidden=true;
+      successEl.hidden=false;
+    }catch(err){
+      setError('Something went wrong. Please try again.');
+      btn.classList.remove('loading');
+      btn.disabled=false;
+      input.disabled=false;
+    }
+  });
+})();
+
+/* ── STICKY SUBSCRIBE BAR ─────────────────
+   Appears once the hero has scrolled out of view; scrolls back
+   to the signup form and focuses the email field on click. */
+(function(){
+  const heroEl=document.getElementById('hero');
+  const bar=document.getElementById('sticky-subscribe');
+  const btn=document.getElementById('sticky-subscribe-btn');
+  const signup=document.getElementById('hero-signup');
+  const emailInput=document.getElementById('signup-email');
+  if(!heroEl||!bar||!btn)return;
+
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const show=!entry.isIntersecting;
+      bar.classList.toggle('visible',show);
+      btn.tabIndex=show?0:-1;
+    });
+  },{threshold:0});
+  io.observe(heroEl);
+
+  btn.addEventListener('click',()=>{
+    if(signup){
+      signup.scrollIntoView({behavior:prefersReducedMotion?'auto':'smooth',block:'center'});
+    }
+    if(emailInput){
+      setTimeout(()=>emailInput.focus(),prefersReducedMotion?0:500);
+    }
+  });
 })();
 
 /* ── HORIZONTAL SCROLL ──────────────────── */

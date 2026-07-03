@@ -14,9 +14,9 @@
 
     var count = document.getElementById('pre-count');
     var n = 0;
-    /* ~2.5s total: 100ms ticks, avg +4 per tick */
+    /* ~2s total: 100ms ticks, avg +5 per tick */
     var t = setInterval(function () {
-      n = Math.min(100, n + Math.ceil(Math.random() * 7));
+      n = Math.min(100, n + Math.ceil(Math.random() * 9));
       count.textContent = n + '%';
       pre.style.setProperty('--p', n / 100);
       if (n >= 100) {
@@ -25,7 +25,7 @@
       }
     }, 100);
     /* hard safety: never trap the page */
-    setTimeout(function () { pre.classList.add('done'); }, 4000);
+    setTimeout(function () { pre.classList.add('done'); }, 3500);
   })();
 
   /* ── NAV shrink after 80px ────────────────── */

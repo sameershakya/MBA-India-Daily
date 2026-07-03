@@ -80,9 +80,10 @@
 
   --ink-rgb: 23,22,20;
 
-  /* brand logo colors — from the official "M" mark, used ONLY inside the logo */
+  /* brand logo — black & white version of the official "M" mark */
   --brand-black: #050505;
-  --brand-teal:  #00CFC8;
+  --brand-white: #FFFFFF;
+  --brand-serif: 'Times New Roman', Times, Georgia, serif;
 
   --sans:  'Archivo', system-ui, -apple-system, sans-serif;
   --serif: 'Instrument Serif', Georgia, serif;
@@ -189,11 +190,10 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
 .pre-mark{
   width:72px; height:72px;
   background:var(--brand-black);
-  border:2px solid var(--brand-teal);
-  box-shadow:0 0 10px rgba(0,207,200,.45), 0 0 26px rgba(0,207,200,.18);
-  color:#FFFFFF;
+  border:2px solid var(--brand-white);
+  color:var(--brand-white);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:42px; line-height:1;
+  font-family:var(--brand-serif); font-size:42px; line-height:1;
 }
 .pre-name{
   font-size:15px; font-weight:900; letter-spacing:.3em; text-transform:uppercase;
@@ -227,11 +227,10 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
 .brand-mark{
   width:34px; height:34px; flex-shrink:0;
   background:var(--brand-black);
-  border:1.5px solid var(--brand-teal);
-  box-shadow:0 0 6px rgba(0,207,200,.4);
-  color:#FFFFFF;
+  border:1.5px solid var(--brand-white);
+  color:var(--brand-white);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:20px; line-height:1;
+  font-family:var(--brand-serif); font-size:20px; line-height:1;
   transition:width .3s var(--ease), height .3s var(--ease);
 }
 #nav.scrolled .brand-mark{ width:30px; height:30px; font-size:18px; }
@@ -534,11 +533,10 @@ footer{
 .foot-mark{
   width:44px; height:44px; flex-shrink:0;
   background:var(--brand-black);
-  border:2px solid var(--brand-teal);
-  box-shadow:0 0 8px rgba(0,207,200,.4);
-  color:#FFFFFF;
+  border:2px solid var(--brand-white);
+  color:var(--brand-white);
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-size:26px;
+  font-family:var(--brand-serif); font-size:26px;
 }
 .foot-name{ font-size:15px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; line-height:1.2; }
 .foot-tag{ font-family:var(--serif); font-style:italic; font-weight:400; font-size:14px; color:rgba(247,245,239,.75); }

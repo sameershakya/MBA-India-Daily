@@ -14,17 +14,18 @@
 
     var count = document.getElementById('pre-count');
     var n = 0;
+    /* ~2.5s total: 100ms ticks, avg +4 per tick */
     var t = setInterval(function () {
-      n = Math.min(100, n + Math.ceil(Math.random() * 22));
+      n = Math.min(100, n + Math.ceil(Math.random() * 7));
       count.textContent = n + '%';
       pre.style.setProperty('--p', n / 100);
       if (n >= 100) {
         clearInterval(t);
         setTimeout(function () { pre.classList.add('done'); }, 180);
       }
-    }, 90);
+    }, 100);
     /* hard safety: never trap the page */
-    setTimeout(function () { pre.classList.add('done'); }, 2500);
+    setTimeout(function () { pre.classList.add('done'); }, 4000);
   })();
 
   /* ── NAV shrink after 80px ────────────────── */

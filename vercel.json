@@ -1,0 +1,13 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(main.js|favicon.svg)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+    },
+    {
+      "source": "/(og-image.png|og-square.png|apple-touch-icon.png)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
+    }
+  ]
+}

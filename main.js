@@ -16,7 +16,7 @@
     var n = 0;
     var t = setInterval(function () {
       n = Math.min(100, n + Math.ceil(Math.random() * 22));
-      count.textContent = (n < 10 ? '0' : '') + n;
+      count.textContent = n + '%';
       pre.style.setProperty('--p', n / 100);
       if (n >= 100) {
         clearInterval(t);

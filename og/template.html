@@ -22,8 +22,8 @@
   }
   .og   .card{ width:1200px; height:630px;  padding:64px 72px; }
   .sq   .card{ width:1080px; height:1080px; padding:80px 84px; }
-  .icon .card{ width:180px;  height:180px;  border-width:10px; padding:0;
-               align-items:center; justify-content:center; }
+  .icon .card{ width:180px;  height:180px;  border:none; outline:none; padding:0;
+               background:#050505; align-items:center; justify-content:center; }
 
   .rule{ height:4px; background:var(--ink); width:88px; margin-bottom:28px; }
   .eyebrow{
@@ -49,14 +49,16 @@
   }
   .brand{ display:flex; align-items:center; gap:18px; }
   .mark{
-    width:64px; height:64px; border:3px solid var(--ink);
+    width:64px; height:64px;
+    background:#050505; border:3px solid #00CFC8; color:#FFFFFF;
+    box-shadow:0 0 10px rgba(0,207,200,.5);
     display:flex; align-items:center; justify-content:center;
-    font-family:'Instrument Serif', Georgia, serif; font-style:italic; font-size:40px;
+    font-family:'Instrument Serif', Georgia, serif; font-size:40px;
   }
   .brand b{ font-size:24px; font-weight:900; text-transform:uppercase; letter-spacing:.06em; }
   .brand small{ display:block; font-size:13px; font-weight:800; letter-spacing:.24em; color:var(--ink-muted); text-transform:uppercase; }
   .foot .free{ font-weight:800; font-size:20px; text-transform:uppercase; letter-spacing:.14em; color:var(--ink-muted); }
-  .icon .mark{ width:180px; height:180px; border:none; font-size:110px; }
+  .icon .mark{ width:156px; height:156px; border:6px solid #00CFC8; box-shadow:none; font-size:96px; }
 </style>
 </head>
 <body>

@@ -80,6 +80,10 @@
 
   --ink-rgb: 23,22,20;
 
+  /* brand logo colors — from the official "M" mark, used ONLY inside the logo */
+  --brand-black: #050505;
+  --brand-teal:  #00CFC8;
+
   --sans:  'Archivo', system-ui, -apple-system, sans-serif;
   --serif: 'Instrument Serif', Georgia, serif;
 
@@ -183,10 +187,19 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
 .js #preloader.done{ transform:translateY(-100%); visibility:hidden; }
 .js #preloader.skip{ display:none; }
 .pre-mark{
-  width:64px; height:64px;
-  border:2px solid var(--ink);
+  width:72px; height:72px;
+  background:var(--brand-black);
+  border:2px solid var(--brand-teal);
+  box-shadow:0 0 10px rgba(0,207,200,.45), 0 0 26px rgba(0,207,200,.18);
+  color:#FFFFFF;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-style:italic; font-size:38px; line-height:1;
+  font-family:var(--serif); font-size:42px; line-height:1;
+}
+.pre-name{
+  font-size:15px; font-weight:900; letter-spacing:.3em; text-transform:uppercase;
+  white-space:nowrap;
+  clip-path:inset(0 calc((1 - var(--p,0)) * 100%) 0 0);
+  transition:clip-path .2s linear;
 }
 .pre-count{
   font-size:12px; font-weight:700; letter-spacing:.2em; color:var(--ink-muted);
@@ -213,9 +226,12 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
 .nav-brand{ display:flex; align-items:center; gap:10px; min-height:44px; }
 .brand-mark{
   width:34px; height:34px; flex-shrink:0;
-  border:2px solid var(--ink);
+  background:var(--brand-black);
+  border:1.5px solid var(--brand-teal);
+  box-shadow:0 0 6px rgba(0,207,200,.4);
+  color:#FFFFFF;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-style:italic; font-size:20px; line-height:1;
+  font-family:var(--serif); font-size:20px; line-height:1;
   transition:width .3s var(--ease), height .3s var(--ease);
 }
 #nav.scrolled .brand-mark{ width:30px; height:30px; font-size:18px; }
@@ -256,7 +272,6 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
 #nav.menu-open{ background:transparent; border-bottom-color:transparent; -webkit-backdrop-filter:none; backdrop-filter:none; }
 #nav.menu-open .menu-btn span{ background:var(--paper); }
 #nav.menu-open .nav-brand{ color:var(--paper); }
-#nav.menu-open .brand-mark{ border-color:var(--paper); }
 #nav.menu-open .brand-name small{ color:rgba(247,245,239,.6); }
 
 /* mobile overlay menu */
@@ -387,9 +402,15 @@ section{ border-top:1px solid var(--line); }  /* newspaper column rules */
 .layers-title{ font-size:clamp(2.1rem,8.5vw,4.2rem); margin-bottom:14px; }
 .layers-intro{ max-width:520px; margin-bottom:48px; }
 .layer-stack{ position:relative; max-width:640px; }
+/* spine runs from the centre of dot 1 to the centre of dot 3 */
 .layer-spine{
-  position:absolute; left:19px; top:8px; bottom:8px; width:2px;
+  position:absolute; left:19px; top:14px; bottom:0; width:2px;
   background:var(--line);
+}
+.layer:last-child::before{
+  /* mask the spine below the final dot so the line ends at dot 3 */
+  content:''; position:absolute; left:15px; top:16px; bottom:0; width:10px;
+  background:var(--paper-raised);
 }
 .js .layer-spine::after{
   content:''; position:absolute; inset:0; background:var(--accent);
@@ -416,7 +437,7 @@ section{ border-top:1px solid var(--line); }  /* newspaper column rules */
   background:var(--paper); border:1px solid var(--line);
   padding:20px 22px;
 }
-.layer-sample{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:24px; display:inline-block; border:1px solid var(--line); padding:6px 12px; background:var(--paper); }
+.layer-sample{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:28px; display:inline-block; border:1px solid var(--line); padding:6px 12px; background:var(--paper); }
 
 /* ═══ DOMAINS GRID ══════════════════════════ */
 #domains{ padding:72px 0 84px; }
@@ -512,9 +533,12 @@ footer{
 .foot-brand{ display:flex; align-items:center; gap:12px; }
 .foot-mark{
   width:44px; height:44px; flex-shrink:0;
-  border:2px solid var(--paper);
+  background:var(--brand-black);
+  border:2px solid var(--brand-teal);
+  box-shadow:0 0 8px rgba(0,207,200,.4);
+  color:#FFFFFF;
   display:flex; align-items:center; justify-content:center;
-  font-family:var(--serif); font-style:italic; font-size:26px;
+  font-family:var(--serif); font-size:26px;
 }
 .foot-name{ font-size:15px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; line-height:1.2; }
 .foot-tag{ font-family:var(--serif); font-style:italic; font-weight:400; font-size:14px; color:rgba(247,245,239,.75); }
@@ -553,8 +577,9 @@ footer{
 <!-- ═══ PRELOADER ═══ -->
 <div id="preloader" aria-hidden="true">
   <div class="pre-mark">M</div>
+  <div class="pre-name">MBA India Daily</div>
   <div class="pre-rule"></div>
-  <div class="pre-count" id="pre-count">00</div>
+  <div class="pre-count" id="pre-count">0%</div>
 </div>
 
 <!-- ═══ NAV ═══ -->
@@ -709,8 +734,8 @@ footer{
     <h2 id="layers-h" class="display layers-title" data-reveal style="--d:.08s">Every Story. <em>Three Layers.</em></h2>
     <p class="body-copy layers-intro" data-reveal style="--d:.16s">Here's a real one, broken down the MBA India Daily way:</p>
 
+    <span class="layer-sample" data-reveal>Sample · RBI Monetary Policy</span>
     <div class="layer-stack" data-reveal>
-      <span class="layer-sample">Sample · RBI Monetary Policy</span>
       <div class="layer-spine" aria-hidden="true"></div>
 
       <div class="layer" data-reveal style="--d:.15s">

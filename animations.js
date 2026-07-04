@@ -192,6 +192,58 @@
     window.addEventListener('resize', queue, { passive: true });
   })();
 
+  /* ── 9-DOMAINS CAROUSEL (mobile) ─────────────────────────────
+     CSS scroll-snap does the swiping; JS adds the progress bar and
+     a scale/opacity emphasis on whichever card is nearest centre.
+     Deactivates itself above the 560px grid breakpoint and clears
+     any inline styles so the desktop grid is never left mid-transform. */
+  (function () {
+    var grid = document.getElementById('domain-grid');
+    var fill = document.getElementById('domain-progress-fill');
+    if (!grid || !fill) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.domain-card'));
+    var mq = window.matchMedia('(max-width:559px)');
+    var raf = null;
+
+    function reset() {
+      cards.forEach(function (c) { c.style.transform = ''; c.style.opacity = ''; });
+      fill.style.width = '';
+      fill.style.transform = '';
+    }
+
+    function update() {
+      raf = null;
+      if (!mq.matches) return;
+      var gRect = grid.getBoundingClientRect();
+      var centre = gRect.left + gRect.width / 2;
+
+      if (!reduced) {
+        cards.forEach(function (c) {
+          var r = c.getBoundingClientRect();
+          var cardCentre = r.left + r.width / 2;
+          var dist = Math.min(1, Math.abs(cardCentre - centre) / (r.width * 0.9));
+          c.style.transform = 'scale(' + (1 - dist * 0.06).toFixed(3) + ')';
+          c.style.opacity = (1 - dist * 0.3).toFixed(2);
+        });
+      }
+
+      var max = grid.scrollWidth - grid.clientWidth;
+      var frac = max > 0 ? grid.scrollLeft / max : 0;
+      var trackW = fill.parentElement.clientWidth;
+      var fillW = Math.max(24, (grid.clientWidth / grid.scrollWidth) * trackW);
+      fill.style.width = fillW + 'px';
+      fill.style.transform = 'translateX(' + (frac * (trackW - fillW)).toFixed(1) + 'px)';
+    }
+    function queue() { if (!raf) raf = requestAnimationFrame(update); }
+
+    grid.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', function () {
+      if (!mq.matches) reset();
+      queue();
+    }, { passive: true });
+    update();
+  })();
+
   /* ── ANIMATED COUNTERS ─────────────────────────────────────
      threshold lowered + generous rootMargin so short stat rows on
      small mobile viewports reliably cross the trigger even with a

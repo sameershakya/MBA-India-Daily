@@ -56,6 +56,77 @@
   }
   buildUnderlines();
 
+  /* ── HERO PARALLAX — gyroscope (mobile) / mouse (desktop) ───
+     Drifts 3 decorative hero elements a few px for a tactile feel.
+     Never requests iOS motion permission on load — only after the
+     first user gesture, per Apple's requirement. Falls back to
+     mouse-move on desktop, and to a static hero everywhere else. */
+  (function () {
+    if (reduced) return;
+    var watermark = document.getElementById('hero-watermark');
+    var chip1 = document.getElementById('hero-chip-1');
+    var chip2 = document.getElementById('hero-chip-2');
+    if (!watermark || !chip1 || !chip2) return;
+    var targets = [
+      { el: watermark, mx: 5, my: 5 },
+      { el: chip1, mx: 12, my: -8 },
+      { el: chip2, mx: -12, my: 8 }
+    ];
+
+    var raf = null, curX = 0, curY = 0; /* -1..1 normalized */
+    function apply() {
+      raf = null;
+      targets.forEach(function (t) {
+        t.el.style.transform = 'translate3d(' + (curX * t.mx).toFixed(1) + 'px,' + (curY * t.my).toFixed(1) + 'px,0)';
+      });
+    }
+    function queue(x, y) {
+      curX = Math.max(-1, Math.min(1, x));
+      curY = Math.max(-1, Math.min(1, y));
+      if (!raf) raf = requestAnimationFrame(apply);
+    }
+
+    /* desktop — mouse position relative to viewport centre */
+    if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      window.addEventListener('pointermove', function (e) {
+        queue((e.clientX / window.innerWidth - 0.5) * 2, (e.clientY / window.innerHeight - 0.5) * 2);
+      }, { passive: true });
+      return;
+    }
+
+    /* mobile — device orientation, gated behind a user gesture on iOS */
+    if (typeof DeviceOrientationEvent === 'undefined') return; /* static */
+
+    function attachTilt() {
+      window.addEventListener('deviceorientation', function (e) {
+        if (e.gamma === null || e.beta === null) return;
+        queue(
+          Math.max(-45, Math.min(45, e.gamma)) / 45,
+          Math.max(-45, Math.min(45, e.beta - 45)) / 45
+        );
+      }, { passive: true });
+    }
+
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      /* iOS 13+: must be requested inside a user-gesture handler, never on load */
+      var granted = false;
+      function onFirstGesture() {
+        document.removeEventListener('touchend', onFirstGesture);
+        document.removeEventListener('click', onFirstGesture);
+        if (granted) return;
+        granted = true;
+        DeviceOrientationEvent.requestPermission().then(function (state) {
+          if (state === 'granted') attachTilt();
+        }).catch(function () { /* denied — hero stays static, no error surfaced */ });
+      }
+      document.addEventListener('touchend', onFirstGesture, { passive: true });
+      document.addEventListener('click', onFirstGesture, { passive: true });
+    } else {
+      /* Android / other browsers expose it without a permission prompt */
+      attachTilt();
+    }
+  })();
+
   /* ── SCROLL REVEALS — once, never re-trigger ─────────────── */
   (function () {
     var els = document.querySelectorAll('[data-reveal]');

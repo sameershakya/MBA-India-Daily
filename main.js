@@ -6,10 +6,15 @@
   /* ── PRELOADER — once per session ─────────── */
   (function () {
     var pre = document.getElementById('preloader');
-    if (!pre) return;
+    var html = document.documentElement;
+    if (!pre) { html.classList.add('hero-ready'); return; }
     var seen = false;
     try { seen = sessionStorage.getItem('mid-preloaded') === '1'; } catch (e) {}
-    if (seen || reduced) { pre.classList.add('skip'); return; }
+    if (seen || reduced) {
+      pre.classList.add('skip');
+      html.classList.add('hero-ready'); /* hero must still play if no curtain */
+      return;
+    }
     try { sessionStorage.setItem('mid-preloaded', '1'); } catch (e) {}
 
     var count = document.getElementById('pre-count');
@@ -21,11 +26,23 @@
       pre.style.setProperty('--p', n / 100);
       if (n >= 100) {
         clearInterval(t);
-        setTimeout(function () { pre.classList.add('done'); }, 180);
+        finish();
       }
     }, 100);
     /* hard safety: never trap the page */
-    setTimeout(function () { pre.classList.add('done'); }, 3500);
+    var safety = setTimeout(finish, 3500);
+
+    var finished = false;
+    function finish() {
+      if (finished) return;
+      finished = true;
+      clearInterval(t);
+      clearTimeout(safety);
+      setTimeout(function () {
+        pre.classList.add('done');
+        html.classList.add('hero-ready'); /* hero plays as the curtain lifts */
+      }, 180);
+    }
   })();
 
   /* ── NAV shrink after 80px ────────────────── */

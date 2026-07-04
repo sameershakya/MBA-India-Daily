@@ -40,6 +40,92 @@
     });
   }
 
+  /* ── ARROW WRAPPING — lets the "→" glyph slide independently ──
+     Wraps a trailing arrow in its own span so CSS can translateX it
+     on hover/press without touching the rest of the label. Regex only
+     matches an arrow at the very end of the markup, so nested tags
+     (e.g. "Today's <em>Edition</em> →") are untouched. */
+  function wrapArrows() {
+    document.querySelectorAll('.btn, .nav-cta, .menu-link').forEach(function (el) {
+      if (el.querySelector('.btn-arrow, .nav-arrow')) return;
+      if (/→\s*$/.test(el.innerHTML)) {
+        var cls = el.classList.contains('menu-link') || el.classList.contains('nav-cta') ? 'nav-arrow' : 'btn-arrow';
+        el.innerHTML = el.innerHTML.replace(/→\s*$/, '<span class="' + cls + '">→</span>');
+      }
+    });
+  }
+  wrapArrows();
+
+  /* ── SCROLL PROGRESS BAR ──────────────────────────────────── */
+  (function () {
+    var bar = document.getElementById('scroll-progress');
+    if (!bar) return;
+    var raf = null;
+    function update() {
+      raf = null;
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    }
+    function queue() { if (!raf) raf = requestAnimationFrame(update); }
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue, { passive: true });
+    update();
+  })();
+
+  /* ── MARQUEE — velocity-linked speed ──────────────────────────
+     Reads each track's base duration from its own inline --mq-t once,
+     then while the page is being actively scrolled, shortens that
+     duration (i.e. speeds the ticker up) in proportion to scroll
+     velocity, clamped, and eases back to the base speed once
+     scrolling stops. Skipped entirely under reduced-motion, where the
+     marquee animation is already disabled by CSS. */
+  (function () {
+    if (reduced) return;
+    var tracks = Array.prototype.slice.call(document.querySelectorAll('.marquee-track'));
+    if (!tracks.length) return;
+    var state = tracks.map(function (t) {
+      var base = parseFloat(getComputedStyle(t).getPropertyValue('--mq-t')) || 32;
+      return { el: t, base: base, factor: 1, target: 1 };
+    });
+
+    var lastY = window.scrollY, lastT = performance.now();
+    var idleTimer = null;
+    var raf = null;
+
+    function onScroll() {
+      var now = performance.now();
+      var dy = Math.abs(window.scrollY - lastY);
+      var dt = Math.max(16, now - lastT);
+      var velocity = dy / dt; // px per ms
+      lastY = window.scrollY; lastT = now;
+
+      /* clamp: at velocity ~2.5px/ms tracks run at 45% of base duration (fastest) */
+      var target = Math.max(0.45, 1 - Math.min(1, velocity / 2.5) * 0.55);
+      state.forEach(function (s) { s.target = target; });
+
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () {
+        state.forEach(function (s) { s.target = 1; });
+      }, 150);
+
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    function tick() {
+      raf = null;
+      var stillMoving = false;
+      state.forEach(function (s) {
+        s.factor += (s.target - s.factor) * 0.12;
+        if (Math.abs(s.target - s.factor) > 0.002) stillMoving = true;
+        s.el.style.setProperty('--mq-t', (s.base * s.factor).toFixed(2) + 's');
+      });
+      if (stillMoving) raf = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+
   /* Rebuild on resize (debounced) since underline width depends on layout */
   var resizeT;
   window.addEventListener('resize', function () {

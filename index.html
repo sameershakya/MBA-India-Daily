@@ -231,6 +231,14 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
   transform:scaleX(var(--p,0)); transform-origin:left; transition:transform .2s linear;
 }
 
+/* ═══ SCROLL PROGRESS BAR ═══════════════════ */
+#scroll-progress{
+  position:fixed; top:0; left:0; right:0; height:3px;
+  background:var(--accent);
+  transform:scaleX(0); transform-origin:left;
+  z-index:850; pointer-events:none;
+}
+
 /* ═══ NAV ═══════════════════════════════════ */
 #nav{
   position:fixed; top:0; left:0; right:0; z-index:800;
@@ -274,6 +282,7 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
   transition:background .2s;
 }
 .nav-cta:hover{ background:var(--accent); }
+.nav-cta:active{ transform:scale(var(--tap-scale)); }
 
 /* hamburger */
 .menu-btn{
@@ -445,6 +454,14 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
 .btn-primary:hover{ background:var(--accent); border-color:var(--accent); transform:translateY(-2px); }
 .btn-ghost{ background:transparent; color:var(--ink); }
 .btn-ghost:hover{ color:var(--accent); border-color:var(--accent); transform:translateY(-2px); }
+.btn:active{ transform:scale(var(--tap-scale)); transition-duration:.1s; }
+
+/* arrow glyphs get their own span (injected by animations.js) so they
+   can slide independently of the label on hover/press */
+.btn-arrow, .nav-arrow{ display:inline-block; transition:transform .3s var(--ease-out-quart); }
+.btn:hover .btn-arrow, .btn:active .btn-arrow,
+.nav-cta:hover .nav-arrow, .nav-cta:active .nav-arrow,
+.menu-link:hover .nav-arrow{ transform:translateX(4px); }
 
 .scroll-cue{
   position:absolute; left:50%; bottom:12px; transform:translateX(-50%);
@@ -547,6 +564,8 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
   color:var(--ink-muted); transition:color .2s, transform .3s var(--ease-out-quart);
 }
 .flip-btn:hover{ color:var(--accent); }
+.flip-btn:active{ transform:scale(var(--tap-scale)); }
+.stack-card.flipped .flip-btn:active{ transform:rotate(180deg) scale(var(--tap-scale)); }
 .flip-btn svg{ width:15px; height:15px; }
 .stack-card.flipped .flip-btn{ transform:rotate(180deg); }
 
@@ -636,6 +655,12 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
 }
 .domain-card:hover{ transform:translateY(-3px); background:var(--paper); }
 .domain-card:hover::before{ transform:scaleX(1); }
+@media (min-width:560px){
+  /* tap feedback only in static-grid mode — in the mobile carousel,
+     transform is owned every frame by the scroll-linked centring JS,
+     and a competing CSS :active transform would just flicker against it */
+  .domain-card:active{ transform:scale(var(--tap-scale)); transition:transform .15s var(--ease-out-quart); }
+}
 .dc-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
 .dc-num{ font-size:10px; font-weight:700; letter-spacing:.18em; color:var(--ink-muted); }
 .dc-icon{ color:var(--ink); }
@@ -726,6 +751,8 @@ footer{
   transition:border-color .2s, background .2s;
 }
 .foot-social a:hover{ border-color:var(--paper); background:rgba(247,245,239,.08); }
+.foot-social a:active{ transform:scale(var(--tap-scale)); }
+.nav-link:active, .menu-link:active{ opacity:.6; }
 .foot-social svg{ width:20px; height:20px; fill:var(--paper); }
 .foot-copy{
   margin-top:36px; padding-top:24px; border-top:1px solid rgba(247,245,239,.2);
@@ -740,7 +767,6 @@ footer{
   .accent-underline path{ transition:none; stroke-dashoffset:0; }
   .marquee-track{ animation:none; }
   .scroll-cue svg{ animation:none; }
-  .js .layer-spine::after{ transition:none; }
   .js #menu .menu-item{ transition:opacity .2s linear; transform:none; }
   .btn, .domain-card{ transition:none; }
   .js #preloader{ display:none; }
@@ -750,6 +776,8 @@ footer{
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
+
+<div id="scroll-progress" aria-hidden="true"></div>
 
 <!-- ═══ PRELOADER ═══ -->
 <div id="preloader" aria-hidden="true">

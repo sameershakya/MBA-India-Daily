@@ -143,20 +143,53 @@
       });
     }, { threshold: 0.2, rootMargin: '0px 0px -5% 0px' });
     els.forEach(function (el) { io.observe(el); });
+  })();
 
-    /* the 3-layer spine draws when its stack enters */
-    var stack = document.querySelector('.layer-stack');
-    if (stack) {
-      var io2 = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            stack.classList.add('in');
-            io2.unobserve(stack);
-          }
-        });
-      }, { threshold: 0.15 });
-      io2.observe(stack);
+  /* ── 3-LAYER STICKY STACK — scroll-linked scale/shadow polish ──
+     The pin-and-stack mechanic itself is pure CSS (position:sticky
+     with an increasing top offset per card, higher z-index per card).
+     JS only adds the "receding card" feel: as the next card's wrapper
+     scrolls up to cover this one, this card scales down slightly and
+     its shadow pseudo-element fades — both transform/opacity only,
+     computed from getBoundingClientRect so it's exactly scroll-linked
+     (not IntersectionObserver, since this needs a continuous 0..1
+     value rather than a single enter/exit trigger). rAF-throttled,
+     passive scroll listener, will-change only while the section is
+     in view. */
+  (function () {
+    if (reduced) return;
+    var stackEl = document.getElementById('layer-stack-3d');
+    if (!stackEl) return;
+    var items = Array.prototype.slice.call(stackEl.querySelectorAll('.stack-item'));
+    var cards = items.map(function (it) { return it.querySelector('.stack-card'); });
+    var baseRot = [-0.5, 0.4, -0.3];
+    var active = false;
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        active = entry.isIntersecting;
+        cards.forEach(function (c) { c.style.willChange = active ? 'transform' : 'auto'; });
+        if (active) update();
+      });
+    }, { threshold: 0, rootMargin: '20% 0px 20% 0px' });
+    io.observe(stackEl);
+
+    var raf = null;
+    function update() {
+      raf = null;
+      if (!active) return;
+      var vh = window.innerHeight;
+      for (var i = 0; i < cards.length - 1; i++) {
+        var nextTop = items[i + 1].getBoundingClientRect().top;
+        var progress = 1 - Math.min(1, Math.max(0, nextTop / vh));
+        var scale = 1 - progress * 0.05;
+        cards[i].style.transform = 'rotate(' + baseRot[i] + 'deg) scale(' + scale.toFixed(3) + ')';
+        cards[i].style.setProperty('--stack-shadow-op', (1 - progress * 0.55).toFixed(2));
+      }
     }
+    function queue() { if (!raf) raf = requestAnimationFrame(update); }
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue, { passive: true });
   })();
 
   /* ── ANIMATED COUNTERS ─────────────────────────────────────

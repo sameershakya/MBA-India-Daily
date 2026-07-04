@@ -127,6 +127,62 @@
     }
   })();
 
+  /* ── AUDIENCE CARDS — 3D tilt (touch + mouse via Pointer Events) ──
+     One unified pointermove handler covers both: for a mouse it fires
+     continuously while hovering (desktop hover-tilt); for touch it
+     only fires while the finger is down and moving across the card
+     (touchstart/touchmove), which is exactly the brief's spec for
+     each device without needing separate code paths. Springs back to
+     flat on pointerup/leave/cancel. Transform + perspective only. */
+  (function () {
+    if (reduced) return;
+    var MAX_DEG = 6;
+    document.querySelectorAll('.aud-card').forEach(function (card) {
+      var raf = null, rx = 0, ry = 0;
+      function apply() {
+        raf = null;
+        card.style.transform = 'perspective(800px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+      }
+      function onMove(e) {
+        var r = card.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width;
+        var py = (e.clientY - r.top) / r.height;
+        ry = (px - 0.5) * 2 * MAX_DEG;
+        rx = -(py - 0.5) * 2 * MAX_DEG;
+        card.style.transition = 'none';
+        if (!raf) raf = requestAnimationFrame(apply);
+      }
+      function reset() {
+        card.style.transition = 'transform .5s var(--spring)';
+        card.style.transform = 'perspective(800px)';
+      }
+      card.addEventListener('pointermove', onMove, { passive: true });
+      card.addEventListener('pointerup', reset, { passive: true });
+      card.addEventListener('pointerleave', reset, { passive: true });
+      card.addEventListener('pointercancel', reset, { passive: true });
+    });
+  })();
+
+  /* ── SAMPLE STORY CARDS — tap-to-flip ──────────────────────
+     Click is used (not pointerdown) specifically because browsers
+     already suppress the synthetic click that follows a scroll-drag,
+     so this can't misfire while someone is scrolling past the card —
+     no custom gesture-distance math needed. Bubbles up from the
+     flip-btn too, so keyboard Enter/Space on that button "just works"
+     without a second listener. */
+  (function () {
+    document.querySelectorAll('.stack-card').forEach(function (card) {
+      var btn = card.querySelector('.flip-btn');
+      card.addEventListener('click', function () {
+        var flipped = card.classList.toggle('flipped');
+        if (btn) {
+          btn.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+          btn.setAttribute('aria-label', flipped ? 'Flip card back to the story' : 'Flip card to see the takeaway');
+        }
+      });
+    });
+  })();
+
   /* ── SCROLL REVEALS — once, never re-trigger ─────────────── */
   (function () {
     var els = document.querySelectorAll('[data-reveal]');

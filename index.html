@@ -505,9 +505,8 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
   position:sticky;
   width:calc(100% - 2 * var(--pad-x));
   max-width:640px; margin:0 auto;
-  background:var(--paper); border:1px solid var(--line);
-  padding:26px 24px 30px;
   transform-origin:center top;
+  perspective:1200px;
 }
 .stack-card::after{
   /* shadow lives on a pseudo-element so its opacity — not the
@@ -519,6 +518,37 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
 .stack-item:nth-child(1) .stack-card{ top:calc(var(--nav-h) + 20px); z-index:1; transform:rotate(-.5deg); }
 .stack-item:nth-child(2) .stack-card{ top:calc(var(--nav-h) + 48px); z-index:2; transform:rotate(.4deg); }
 .stack-item:nth-child(3) .stack-card{ top:calc(var(--nav-h) + 76px); z-index:3; transform:rotate(-.3deg); }
+
+/* ── tap-to-flip: front (the story) / back (the takeaway) ── */
+.flip-inner{
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .6s var(--ease-out-expo);
+  cursor:pointer;
+}
+.stack-card.flipped .flip-inner{ transform:rotateY(180deg); }
+.flip-face{
+  background:var(--paper); border:1px solid var(--line);
+  padding:26px 24px 30px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.flip-back{
+  position:absolute; inset:0;
+  transform:rotateY(180deg);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.flip-back-label{ color:var(--accent); }
+.flip-back-text{ font-size:15px; }
+.flip-btn{
+  position:absolute; top:14px; right:14px; z-index:2;
+  width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--line); background:var(--paper);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink-muted); transition:color .2s, transform .3s var(--ease-out-quart);
+}
+.flip-btn:hover{ color:var(--accent); }
+.flip-btn svg{ width:15px; height:15px; }
+.stack-card.flipped .flip-btn{ transform:rotate(180deg); }
 
 .layer-dot{
   display:inline-flex; align-items:center; justify-content:center;
@@ -533,6 +563,13 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
 @media (prefers-reduced-motion:reduce){
   .stack-item{ height:auto; min-height:0; margin-bottom:24px; }
   .stack-card{ position:relative; top:0!important; transform:none!important; }
+  .flip-inner{ transform:none!important; transition:none; }
+  .flip-face{ transition:opacity .25s linear; backface-visibility:visible; }
+  .flip-back{ opacity:0; transform:none!important; }
+  .stack-card.flipped .flip-front{ opacity:0; }
+  .stack-card.flipped .flip-back{ opacity:1; }
+  .flip-btn{ transition:color .2s; }
+  .stack-card.flipped .flip-btn{ transform:none; }
 }
 
 /* ═══ DOMAINS GRID ══════════════════════════ */
@@ -619,7 +656,11 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
 .aud-title{ font-size:clamp(2.1rem,8.5vw,4.2rem); margin-bottom:48px; }
 .aud-grid{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); }
 @media (min-width:900px){ .aud-grid{ grid-template-columns:repeat(3,1fr); } }
-.aud-card{ background:var(--paper); padding:32px 24px 36px; }
+.aud-card{
+  background:var(--paper); padding:32px 24px 36px;
+  transition:transform .5s var(--spring);
+  transform:perspective(800px);
+}
 .aud-tag{
   display:inline-block; margin-bottom:18px;
   font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
@@ -627,6 +668,10 @@ html.hero-ready .hero-h1 .accent-underline path{ transition-delay:820ms; }
 }
 .aud-h{ font-size:clamp(1.5rem,6vw,1.9rem); font-weight:900; text-transform:uppercase; letter-spacing:-.01em; line-height:1.05; margin-bottom:14px; }
 .aud-h em{ font-family:var(--serif); font-style:italic; font-weight:400; text-transform:none; color:var(--accent); }
+
+@media (prefers-reduced-motion:reduce){
+  .aud-card{ transition:none; transform:none!important; }
+}
 
 /* ═══ WHY FOLLOW ════════════════════════════ */
 #why{ padding:72px 0 84px; }
@@ -881,28 +926,61 @@ footer{
   <div class="stack" id="layer-stack-3d">
     <div class="stack-item">
       <div class="stack-card" data-stack-index="0">
-        <span class="layer-dot" aria-hidden="true">1</span>
-        <span class="eyebrow layer-tag">Layer 1 — What Happened</span>
-        <h3 class="layer-h">Samsung launched its 2026 startup incubation programme in India.</h3>
-        <p class="body-copy layer-p">Samsung R&amp;D Institutes in Bengaluru and Noida launched Samsung Mobile Advance (SMA) 2026, a flagship global startup incubation programme. Selected Indian startups get access to Samsung's technical resources, engineers and global distribution partnerships.</p>
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="layer-dot" aria-hidden="true">1</span>
+            <span class="eyebrow layer-tag">Layer 1 — What Happened</span>
+            <h3 class="layer-h">Samsung launched its 2026 startup incubation programme in India.</h3>
+            <p class="body-copy layer-p">Samsung R&amp;D Institutes in Bengaluru and Noida launched Samsung Mobile Advance (SMA) 2026, a flagship global startup incubation programme. Selected Indian startups get access to Samsung's technical resources, engineers and global distribution partnerships.</p>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="eyebrow flip-back-label">Takeaway</span>
+            <p class="body-copy flip-back-text">Corporate accelerators are becoming India's real deal-flow filter — watch who gets selected, not just who launches.</p>
+          </div>
+        </div>
+        <button class="flip-btn" aria-label="Flip card to see the takeaway" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg>
+        </button>
       </div>
     </div>
 
     <div class="stack-item">
       <div class="stack-card" data-stack-index="1">
-        <span class="layer-dot" aria-hidden="true">2</span>
-        <span class="eyebrow layer-tag">Layer 2 — Why It Matters</span>
-        <h3 class="layer-h">Samsung is building a real-options portfolio, not handing out charity.</h3>
-        <p class="body-copy layer-p">It's a collection of startup bets that might produce the next breakthrough in mobile hardware, software or services that Samsung can integrate or acquire. Corporate accelerators are how global brands stay relevant in markets that are innovating faster than they can internally.</p>
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="layer-dot" aria-hidden="true">2</span>
+            <span class="eyebrow layer-tag">Layer 2 — Why It Matters</span>
+            <h3 class="layer-h">Samsung is building a real-options portfolio, not handing out charity.</h3>
+            <p class="body-copy layer-p">It's a collection of startup bets that might produce the next breakthrough in mobile hardware, software or services that Samsung can integrate or acquire. Corporate accelerators are how global brands stay relevant in markets that are innovating faster than they can internally.</p>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="eyebrow flip-back-label">Takeaway</span>
+            <p class="body-copy flip-back-text">When a global giant needs outside options, it's a sign the sector is moving faster than any one company can track alone.</p>
+          </div>
+        </div>
+        <button class="flip-btn" aria-label="Flip card to see the takeaway" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg>
+        </button>
       </div>
     </div>
 
     <div class="stack-item">
       <div class="stack-card" data-stack-index="2">
-        <span class="layer-dot" aria-hidden="true">3</span>
-        <span class="eyebrow layer-tag">Layer 3 — What a Manager Should Do</span>
-        <h3 class="layer-h">Watch what ships next — that's where the signal is.</h3>
-        <p class="body-copy layer-p">The next feature on a Samsung phone that feels surprisingly local and relevant might have come from an Indian startup that went through this programme. Global hardware + Indian software insight = products that actually fit how Indian consumers use their phones.</p>
+        <div class="flip-inner">
+          <div class="flip-face flip-front">
+            <span class="layer-dot" aria-hidden="true">3</span>
+            <span class="eyebrow layer-tag">Layer 3 — What a Manager Should Do</span>
+            <h3 class="layer-h">Watch what ships next — that's where the signal is.</h3>
+            <p class="body-copy layer-p">The next feature on a Samsung phone that feels surprisingly local and relevant might have come from an Indian startup that went through this programme. Global hardware + Indian software insight = products that actually fit how Indian consumers use their phones.</p>
+          </div>
+          <div class="flip-face flip-back">
+            <span class="eyebrow flip-back-label">Takeaway</span>
+            <p class="body-copy flip-back-text">Localisation isn't a nice-to-have anymore — it's how global hardware wins in a market like India.</p>
+          </div>
+        </div>
+        <button class="flip-btn" aria-label="Flip card to see the takeaway" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></svg>
+        </button>
       </div>
     </div>
   </div>

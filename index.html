@@ -94,6 +94,17 @@
   --wrap: 1200px;
 
   --ease: cubic-bezier(.22,.61,.36,1);
+
+  /* ═══ ANIMATION SYSTEM — tune everything from here ═══ */
+  --ease-out-expo:  cubic-bezier(.16,1,.3,1);
+  --ease-out-quart: cubic-bezier(.25,1,.5,1);
+  --spring:         cubic-bezier(.34,1.56,.64,1);
+
+  --reveal-duration: 550ms;
+  --reveal-distance: 24px;
+  --stagger:         70ms;
+
+  --tap-scale: .97;
 }
 @media (min-width:768px){ :root{ --pad-x: 40px; } }
 @media (min-width:1024px){ :root{ --pad-x: 56px; } }
@@ -148,6 +159,7 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
   text-wrap:balance;
 }
 .display em{
+  position:relative;
   font-family:var(--serif);
   font-style:italic;
   font-weight:400;
@@ -155,27 +167,35 @@ button{ font:inherit; color:inherit; background:none; border:none; cursor:pointe
   text-transform:none;
   letter-spacing:0;
   line-height:.9;
+  white-space:nowrap;
 }
-/* underline draw-in on accent words */
-.js .display em{
-  background-image:linear-gradient(var(--accent),var(--accent));
-  background-repeat:no-repeat;
-  background-position:0 96%;
-  background-size:0% 2px;
-  transition:background-size .6s var(--ease) .45s;
+/* hand-drawn SVG underline — injected by animations.js, drawn via stroke-dashoffset */
+.accent-underline{
+  position:absolute; left:-2%; right:-2%; bottom:-.08em;
+  width:104%; height:.22em; overflow:visible;
+  pointer-events:none;
 }
-.js .in .display em, .js .display.in em{ background-size:100% 2px; }
+.accent-underline path{
+  fill:none; stroke:var(--accent); stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-dasharray:var(--len,120); stroke-dashoffset:var(--len,120);
+  transition:stroke-dashoffset .65s var(--ease-out-expo) .35s;
+}
+.in .accent-underline path{ stroke-dashoffset:0; }
 
 .body-copy{ font-weight:600; font-size:16px; line-height:1.7; color:var(--ink-muted); }
 .body-copy strong{ color:var(--ink); }
 
 /* ═══ REVEALS (JS-gated so no-JS never blanks) ═══ */
 .js [data-reveal]{
-  opacity:0; transform:translateY(16px);
-  transition:opacity .45s var(--ease), transform .45s var(--ease);
+  opacity:0; transform:translateY(var(--reveal-distance));
+  transition:opacity var(--reveal-duration) var(--ease-out-expo),
+             transform var(--reveal-duration) var(--ease-out-expo);
   transition-delay:var(--d,0s);
+  will-change:opacity, transform;
 }
 .js [data-reveal].in{ opacity:1; transform:none; }
+.js [data-reveal].in{ will-change:auto; }
 
 /* ═══ PRELOADER ═════════════════════════════ */
 #preloader{ display:none; }
@@ -558,7 +578,7 @@ footer{
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }
   .js [data-reveal]{ transition:opacity .2s linear; transform:none; }
-  .js .display em{ transition:none; background-size:100% 2px; }
+  .accent-underline path{ transition:none; stroke-dashoffset:0; }
   .marquee-track{ animation:none; }
   .scroll-cue svg{ animation:none; }
   .js .layer-spine::after{ transition:none; }
@@ -934,6 +954,7 @@ footer{
   </div>
 </footer>
 
+<script defer src="/animations.js"></script>
 <script defer src="/main.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 </body>
